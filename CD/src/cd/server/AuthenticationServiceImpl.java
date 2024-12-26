@@ -81,38 +81,34 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
      * @return
      * @throws RemoteException
      */
-    @Override
-    public boolean login(String username, String password) throws RemoteException {
-        taskQueue.offer(() -> {
-            try {
-                Path publicKeyPath = Path.of(publicKeyDir, username + ".pub");
-                if (!Files.exists(publicKeyPath)) {
-                    System.out.println("Utilizador não se encontra registado.");
-                    return;
-                }
+      @Override
+    public User login(String username, String password) throws RemoteException {
+        // Verificar se a chave pública do usuário existe
+        Path publicKeyPath = Path.of(publicKeyDir, username + ".pub");
+        if (!Files.exists(publicKeyPath)) {
+            System.out.println("Usuário não encontrado.");
+            return null;  // Retorna null caso o usuário não exista
+        }
 
-                // Carregar as informações do utilizador
-                User user = new User(username, "NORMAL");  // Tipo "NORMAL" como padrão
-                user.load(password);  // Carregar a senha, o que também carrega o tipo de utilizador
+        try {
+            // Carregar o usuário a partir do arquivo
+            User user = new User(username, "NORMAL");  // Tipo "NORMAL" como padrão
+            user.load(password);  // Carregar a senha, o que também carrega o tipo de usuário
 
-                // Verificar o tipo de utilizador
-                String userType = user.getUserType();
-                if ("INSTITUICAO".equals(userType)) {
-                    System.out.println("Utilizador " + username + " é uma instituição.");
-                    // Tratar caso seja uma instituição
-                    // Por exemplo, você pode definir permissões ou comportamentos específicos
-                } else {
-                    System.out.println("Utilizador " + username + " é normal.");
-                }
-
-                System.out.println("Login bem-sucedido para " + username + " com tipo " + userType);
-
-            } catch (Exception e) {
-                e.printStackTrace();
+            // Verificar o tipo de usuário
+            String userType = user.getUserType();
+            if ("INSTITUICAO".equals(userType)) {
+                System.out.println("Usuário " + username + " é uma instituição.");
+            } else {
+                System.out.println("Usuário " + username + " é normal.");
             }
-        });
 
-        return true;
+            return user;  // Retorna o objeto User caso o login tenha sido bem-sucedido
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;  // Retorna null em caso de erro
+        }
     }
 
     /**

@@ -30,11 +30,17 @@ public class AuthenticationClient {
             String password = scanner.nextLine();
 
             if (choice == 1) {
-                if (authService.login(username, password)) {
+                // Receber o objeto User ao invés de um boolean
+                User user = authService.login(username, password);
+
+                if (user != null) {
                     System.out.println("Login bem-sucedido!");
+                    System.out.println("Usuário: " + user.getNome());
+                    System.out.println("Tipo de usuário: " + user.getUserType());
                 } else {
                     System.out.println("Falha no login.");
                 }
+
             } else if (choice == 2) {
                 System.out.println("Digite o tipo de usuário (NORMAL ou INSTITUICAO):");
                 String userType = scanner.nextLine();
@@ -43,7 +49,6 @@ public class AuthenticationClient {
                 user.generateKeys();
                 user.save(password);
 
-                // Envia a chave pública ao servidor
                 if (authService.register(username, password, userType)) {
                     System.out.println("Registro bem-sucedido!");
                 } else {

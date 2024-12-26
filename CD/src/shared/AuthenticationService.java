@@ -12,6 +12,6 @@ import java.rmi.RemoteException;
  * @author António Gonçalves e Afonso Costa
  */
 public interface AuthenticationService extends Remote {
-    boolean login(String username, String password) throws RemoteException;
+    User login(String username, String password) throws RemoteException;
     boolean register(String username, String password, String userType) throws RemoteException;
 }

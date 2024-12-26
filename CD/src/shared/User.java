@@ -2,6 +2,7 @@ package shared;
 
 import cd.utils.SecurityUtils;
 import java.io.File;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.Key;
@@ -14,11 +15,12 @@ import javax.swing.DefaultListModel;
 /**
  * *
  * Classe do utilizador que poderá ser um utilizador 'NORMAL' ou 'INSTITUICAO'.
+ * Temos de adicionar o Serializable para que se possa enviar por RMI.
  *
  * @author António Gonçalves e Afonso Costa
  */
-public class User {
-
+public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
     private PrivateKey privKey;
     private PublicKey pubKey;
     private String nome;
