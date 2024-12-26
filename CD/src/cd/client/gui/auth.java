@@ -19,7 +19,7 @@ import shared.User;
  * @author António
  */
 public class auth extends javax.swing.JFrame {
-
+    
     /**
      * Creates new form auth
      */

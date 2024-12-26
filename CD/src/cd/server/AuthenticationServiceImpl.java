@@ -73,7 +73,8 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
     }
 
     /**
-     * 1ºpasso: verificação da existencia de utilizador 1.1º: caso não exista
+     * 1ºpasso: verificação da existencia de utilizador 
+     * 1.1º: caso não exista
      * chave publica devolvemos logo false, pois nao existe
      *
      * @param username
@@ -94,15 +95,7 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
             // Carregar o usuário a partir do arquivo
             User user = new User(username, "NORMAL");  // Tipo "NORMAL" como padrão
             user.load(password);  // Carregar a senha, o que também carrega o tipo de usuário
-
-            // Verificar o tipo de usuário
-            String userType = user.getUserType();
-            if ("INSTITUICAO".equals(userType)) {
-                System.out.println("Utilizador " + username + " é uma instituição.");
-            } else {
-                System.out.println("Utilizador " + username + " é normal.");
-            }
-
+            
             return user;  // Retorna o objeto User caso o login tenha sido bem-sucedido
 
         } catch (Exception e) {
