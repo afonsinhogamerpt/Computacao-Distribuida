@@ -86,7 +86,7 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
         // Verificar se a chave pública do usuário existe
         Path publicKeyPath = Path.of(publicKeyDir, username + ".pub");
         if (!Files.exists(publicKeyPath)) {
-            System.out.println("Usuário não encontrado.");
+            System.out.println("Utilizador não encontrado.");
             return null;  // Retorna null caso o usuário não exista
         }
 
@@ -98,9 +98,9 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
             // Verificar o tipo de usuário
             String userType = user.getUserType();
             if ("INSTITUICAO".equals(userType)) {
-                System.out.println("Usuário " + username + " é uma instituição.");
+                System.out.println("Utilizador " + username + " é uma instituição.");
             } else {
-                System.out.println("Usuário " + username + " é normal.");
+                System.out.println("Utilizador " + username + " é normal.");
             }
 
             return user;  // Retorna o objeto User caso o login tenha sido bem-sucedido

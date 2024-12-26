@@ -25,7 +25,7 @@ public class AuthenticationServer {
             // Registra o serviço no RMI Registry com o nome "AuthenticationService"
             Naming.rebind("//localhost/AuthenticationService", authServiceImpl);
             
-            System.out.println("Servidor RMI de autenticação iniciado.");
+            System.out.println("Servidor RMI iniciado...");
         } catch (Exception e) {
             e.printStackTrace();
         }

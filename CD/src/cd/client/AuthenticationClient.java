@@ -24,7 +24,7 @@ public class AuthenticationClient {
             int choice = scanner.nextInt();
             scanner.nextLine();
 
-            System.out.println("Digite o nome de usuário:");
+            System.out.println("Digite o nome de utilizador:");
             String username = scanner.nextLine();
             System.out.println("Digite a senha:");
             String password = scanner.nextLine();
@@ -35,14 +35,14 @@ public class AuthenticationClient {
 
                 if (user != null) {
                     System.out.println("Login bem-sucedido!");
-                    System.out.println("Usuário: " + user.getNome());
-                    System.out.println("Tipo de usuário: " + user.getUserType());
+                    System.out.println("utilizador: " + user.getNome());
+                    System.out.println("Tipo de utilizador: " + user.getUserType());
                 } else {
                     System.out.println("Falha no login.");
                 }
 
             } else if (choice == 2) {
-                System.out.println("Digite o tipo de usuário (NORMAL ou INSTITUICAO):");
+                System.out.println("Digite o tipo de utilizador (NORMAL ou INSTITUICAO):");
                 String userType = scanner.nextLine();
 
                 User user = new User(username, userType);
