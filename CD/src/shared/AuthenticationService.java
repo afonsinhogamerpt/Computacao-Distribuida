@@ -6,6 +6,7 @@ package shared;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.security.PublicKey;
 
 /**
  *
@@ -14,4 +15,5 @@ import java.rmi.RemoteException;
 public interface AuthenticationService extends Remote {
     User login(String username, String password) throws RemoteException;
     boolean register(String username, String password, String userType) throws RemoteException;
+   
 }

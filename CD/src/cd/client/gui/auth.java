@@ -4,6 +4,7 @@
  */
 package cd.client.gui;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -283,10 +284,10 @@ public class auth extends javax.swing.JFrame {
      * @param evt
      */
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
-
+        
         String username = usernameLogin.getText();
         String password = new String(passwordLogin.getPassword());
-
+        
         try {
             // TODO add your handling code here:
             AuthenticationService authService = (AuthenticationService) Naming.lookup("//localhost:1099/AuthenticationService");
@@ -304,6 +305,8 @@ public class auth extends javax.swing.JFrame {
         } catch (MalformedURLException ex) {
             Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
+            Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_LoginButtonActionPerformed
@@ -335,9 +338,9 @@ public class auth extends javax.swing.JFrame {
             user.generateKeys();
             user.save(password);
             if (authService.register(username, password, userType)) {
-                System.out.println("Registro bem-sucedido!");
+                System.out.println("Registo bem-sucedido!");
             } else {
-                System.out.println("Falha no registro.");
+                System.out.println("Falha no registo.");
             }
         } catch (Exception ex) {
             Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);

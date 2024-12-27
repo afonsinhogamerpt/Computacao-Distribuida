@@ -44,7 +44,7 @@ public class User implements Serializable {
     }
 
     public void generateKeys() throws Exception {
-        KeyPair kp = SecurityUtils.generateECKeyPair(256);
+        KeyPair kp = SecurityUtils.generateRSAKeyPair(2048);
         this.simKey = SecurityUtils.generateAESKey(256);
         this.privKey = kp.getPrivate();
         this.pubKey = kp.getPublic();

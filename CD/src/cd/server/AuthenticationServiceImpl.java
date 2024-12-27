@@ -14,7 +14,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.security.Key;
+import java.security.PublicKey;
 import java.util.concurrent.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import shared.AuthenticationService;
 import shared.User;
 
@@ -30,7 +35,8 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
     private final ExecutorService executorService;
     private final LinkedBlockingQueue<Runnable> taskQueue;
     private final String publicKeyDir = "server_pub_keys"; // nome da pasta para armazenar as chaves publicas.
-
+ 
+    
     /**
      * *
      * Lista de tarefas para 100 pedidos, bem como uma pool de 10 threads
@@ -39,7 +45,7 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
      *
      * @throws RemoteException
      */
-    public AuthenticationServiceImpl() throws RemoteException {
+    public AuthenticationServiceImpl() throws RemoteException, Exception {
         super();
 
         this.taskQueue = new LinkedBlockingQueue<>(100);
@@ -49,7 +55,8 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
         if (!dir.exists()) {
             dir.mkdir();
         }
-
+       
+        
         startProcessingQueue();
     }
 
@@ -121,7 +128,6 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
                 User user = new User(username, userType);  // O tipo de utilizador pode ser "NORMAL" ou "INSTITUICAO"
                 user.generateKeys();
                 user.save(password); // Salva chaves localmente no cliente
-
                 // Salva a chave pública no servidor
                 savePublicKey(username, user.getPublicKeyEncoded());
 
@@ -137,10 +143,38 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
     private void savePublicKey(String username, String publicKeyEncoded) throws IOException {
         Path publicKeyPath = Path.of(publicKeyDir, username + ".pub");
         Files.write(publicKeyPath, publicKeyEncoded.getBytes());
-        System.out.println("Chave pública de " + username + " salva no servidor.");
+        System.out.println("Chave pública de " + username + " guardada no servidor.");
     }
 
     public void shutdown() {
         executorService.shutdown();
     }
+
+   
+    
+    /*@Override
+    public void addCurriculum(String curriculum, String username) throws RemoteException {
+        try {
+            byte[] content = utils.SecurityUtils.encrypt(curriculum.getBytes(), keyServer);
+            Path pathName = Path.of(curriculumFilesDir, username ,".cur");
+            Files.write(pathName, content);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+       
+    }
+
+    public DefaultListModel getCurriculum() {
+        DefaultListModel model = new DefaultListModel();
+        File rootDir = new File(".");
+        File[] files = rootDir.listFiles();
+        for (File file : files) {
+            if (file.getName().endsWith(".cur")) {
+                model.addElement(file.getName().split("\\.")[0]);
+            }
+        }
+        return model;
+    }
+  */
+ 
 }
