@@ -1,5 +1,6 @@
 package shared;
 
+import cd.client.Curriculum;
 import cd.utils.SecurityUtils;
 import java.io.File;
 import java.io.Serializable;
@@ -9,6 +10,7 @@ import java.security.Key;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.ArrayList;
 import java.util.Base64;
 import javax.swing.DefaultListModel;
 
@@ -32,7 +34,7 @@ public class User implements Serializable {
         this.privKey = null;
         this.pubKey = null;
         this.simKey = null;
-        this.userType = "NORMAL"; // Tipo normal por defeito
+        this.userType = "NORMAL"; // Tipo normal por defeito (ou é "NORMAL" ou "INSTITUICAO")
     }
 
     public User(String nome, String userType) {
@@ -49,8 +51,7 @@ public class User implements Serializable {
         this.privKey = kp.getPrivate();
         this.pubKey = kp.getPublic();
     }
-
-    
+   
     /***
      * Salva o utilizador
      * @param password
@@ -67,7 +68,7 @@ public class User implements Serializable {
         Files.write(Path.of(this.nome + ".sim"), sim);
         Files.write(Path.of(this.nome + ".priv"), secret);
         Files.write(Path.of(this.nome + ".pub"), this.pubKey.getEncoded());
-        Files.write(Path.of(this.nome + ".type"), userTypeData);  // Verifique se este arquivo é criado
+        Files.write(Path.of(this.nome + ".type"), userTypeData);  
     }
 
     
@@ -89,6 +90,12 @@ public class User implements Serializable {
         this.pubKey = SecurityUtils.getPublicKey(pubData);
         this.userType = new String(userTypeData);
     }
+    
+    public void loadPublic() throws Exception{
+         //ler a publica
+        byte[] pubData = Files.readAllBytes(Path.of(this.nome + ".pub"));
+        this.pubKey = SecurityUtils.getPublicKey(pubData);
+    }
 
     public String getPublicKeyEncoded() {
         return Base64.getEncoder().encodeToString(pubKey.getEncoded());
@@ -104,6 +111,10 @@ public class User implements Serializable {
 
     public String getNome() {
         return nome;
+    }
+    
+    public PrivateKey getPriv() {
+        return privKey;
     }
 
     /***

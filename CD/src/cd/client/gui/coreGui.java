@@ -7,6 +7,7 @@ package cd.client.gui;
 import cd.client.Curriculum;
 import cd.server.AuthenticationServiceImpl;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -20,21 +21,21 @@ public class coreGui extends javax.swing.JFrame {
     
      User userLogged = null;
      
-
+     
     /**
      * Creates new form coreGui
      */
     public coreGui() throws Exception {
         initComponents();
-        
+       
     }
     
     
-    public coreGui(User u) throws IOException{
+    public coreGui(User u) throws IOException, Exception{
          initComponents();
          this.userLogged = u;
          username.setText(u.getNome());
-         DefaultListModel model = new Curriculum().getCurriculum();
+         DefaultListModel model = new Curriculum().getCurriculum(userLogged);
          curriculumList.setModel(model);
     }
 
@@ -56,10 +57,13 @@ public class coreGui extends javax.swing.JFrame {
         event = new javax.swing.JTextField();
         name = new javax.swing.JTextField();
         addCurriculum = new javax.swing.JButton();
+        show = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         curriculumList = new javax.swing.JList<>();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        mktList = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -82,10 +86,23 @@ public class coreGui extends javax.swing.JFrame {
             }
         });
 
+        show.setText("Curriculos");
+        show.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(61, 61, 61)
+                .addComponent(addCurriculum)
+                .addGap(55, 55, 55)
+                .addComponent(show)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -93,13 +110,9 @@ public class coreGui extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addGap(25, 25, 25)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(event)
+                    .addComponent(event, javax.swing.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE)
                     .addComponent(name))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(188, Short.MAX_VALUE)
-                .addComponent(addCurriculum)
-                .addGap(168, 168, 168))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -112,9 +125,11 @@ public class coreGui extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(event, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
-                .addComponent(addCurriculum)
-                .addGap(77, 77, 77))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addCurriculum)
+                    .addComponent(show))
+                .addGap(83, 83, 83))
         );
 
         jTabbedPane1.addTab("Adicionar Curriculo", jPanel2);
@@ -123,7 +138,7 @@ public class coreGui extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 437, Short.MAX_VALUE)
+            .addGap(0, 380, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -145,6 +160,8 @@ public class coreGui extends javax.swing.JFrame {
 
         jScrollPane1.setViewportView(curriculumList);
 
+        jScrollPane2.setViewportView(mktList);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -155,7 +172,9 @@ public class coreGui extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jTabbedPane1)
                         .addGap(26, 26, 26)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1)
+                            .addComponent(jScrollPane2))
                         .addGap(28, 28, 28))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel10)
@@ -177,9 +196,11 @@ public class coreGui extends javax.swing.JFrame {
                     .addComponent(jTabbedPane1)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(24, 24, 24)))
                 .addContainerGap())
         );
 
@@ -193,13 +214,33 @@ public class coreGui extends javax.swing.JFrame {
     private void addCurriculumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCurriculumActionPerformed
          try {
              // TODO add your handling code here:
-             Curriculum cur = new Curriculum();
-             cur.addCurriculum((name.getText()+ " " + event.getText()), userLogged);
+             if(userLogged.getUserType().equals("INSTITUICAO")){
+                Curriculum cur = new Curriculum();
+                cur.addCurriculum((name.getText()+ " " + event.getText()), userLogged);
+                DefaultListModel model = new Curriculum().getCurriculum(userLogged);
+                curriculumList.setModel(model);
+                 User toUser = new User("","NORMAL");
+                 toUser.loadPublic();
+            }
+             
          } catch (Exception ex) {
              Logger.getLogger(coreGui.class.getName()).log(Level.SEVERE, null, ex);
          }
         
     }//GEN-LAST:event_addCurriculumActionPerformed
+
+    private void showActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showActionPerformed
+        // TODO add your handling code here:
+        
+         try {
+             Curriculum cur = new Curriculum();
+             //cur.getCurriculumList(userLogged);
+             System.out.println(cur.toString());
+               
+         } catch (Exception ex) {
+             Logger.getLogger(coreGui.class.getName()).log(Level.SEVERE, null, ex);
+         }
+    }//GEN-LAST:event_showActionPerformed
 
     /**
      * @param args the command line arguments
@@ -251,8 +292,11 @@ public class coreGui extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JList<String> mktList;
     private javax.swing.JTextField name;
+    private javax.swing.JButton show;
     private javax.swing.JLabel username;
     // End of variables declaration//GEN-END:variables
 }
