@@ -12,6 +12,8 @@ import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import shared.AuthenticationService;
 import shared.User;
 
@@ -20,14 +22,13 @@ import shared.User;
  * @author António
  */
 public class auth extends javax.swing.JFrame {
-    
+
     /**
      * Creates new form auth
      */
     public auth() {
         initComponents();
-         DefaultListModel model = new User().getUsers();
-         usersSistema.setModel(model);
+        insertUsersInList();
     }
 
     /**
@@ -284,33 +285,59 @@ public class auth extends javax.swing.JFrame {
      * @param evt
      */
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
-        
         String username = usernameLogin.getText();
         String password = new String(passwordLogin.getPassword());
-        
-        try {
-            // TODO add your handling code here:
-            AuthenticationService authService = (AuthenticationService) Naming.lookup("//localhost:1099/AuthenticationService");
-            
-            User user = authService.login(username, password);
-            if (user != null) {
-                new coreGui(user).setVisible(true);
-                dispose();
-            } else {
-                System.out.println("Falha no login.");
-            }
 
-        } catch (NotBoundException ex) {
-            Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        // Criação de uma thread para não bloquear a interface.
+        new Thread(() -> {
+            try {
+                AuthenticationService authService = (AuthenticationService) Naming.lookup("//localhost:1099/AuthenticationService");
+
+                User user = authService.login(username, password);
+
+                // Atualizar para coreGui e mostrar mensagem de dialog caso falhe o login.
+                SwingUtilities.invokeLater(() -> {
+                    if (user != null) {
+                        try {
+                            new coreGui(user).setVisible(true);
+                            dispose();
+                        } catch (Exception ex) {
+                            Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else {
+                        // Caso o login falhe
+                        JOptionPane.showMessageDialog(auth.this, "Nome de utilizador ou Palavra-passe Inválidos.");
+                    }
+                });
+
+            } catch (NotBoundException ex) {
+                // Caso seja erro de servidor
+                SwingUtilities.invokeLater(() -> {
+                    JOptionPane.showMessageDialog(auth.this, "Erro de servidor " + ex.getMessage());
+                });
+                Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (MalformedURLException ex) {
+                SwingUtilities.invokeLater(() -> {
+                    JOptionPane.showMessageDialog(auth.this, "Erro" + ex.getMessage());
+                });
+                Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex) {
+                SwingUtilities.invokeLater(() -> {
+                    JOptionPane.showMessageDialog(auth.this, "Erro" + ex.getMessage());
+                });
+                Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                SwingUtilities.invokeLater(() -> {
+                    JOptionPane.showMessageDialog(auth.this, "Erro de IO: " + ex.getMessage());
+                });
+                Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                SwingUtilities.invokeLater(() -> {
+                    JOptionPane.showMessageDialog(auth.this, "Erro" + ex.getMessage());
+                });
+                Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }).start(); // Iniciar a thread
     }//GEN-LAST:event_LoginButtonActionPerformed
 
     /**
@@ -320,41 +347,58 @@ public class auth extends javax.swing.JFrame {
      * @param evt
      */
     private void RegistoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistoButtonActionPerformed
-        // TODO add your handling code here:
 
         String username = usernameRegisto.getText();
         String password = new String(passwordRegisto.getPassword());
 
-        String userType = "";
-        boolean isChecked = tipoRegisto.isSelected();
+        String userType = tipoRegisto.isSelected() ? "INSTITUICAO" : "NORMAL";
 
-        if (isChecked) {
-            userType = "INSTITUICAO";
-        } else {
-            userType = "NORMAL";
-        }
+        // Criação de uma thread para não bloquear a interface.
+        new Thread(() -> {
+            try {
 
-        try {
-            AuthenticationService authService = (AuthenticationService) Naming.lookup("//localhost:1099/AuthenticationService");
-            User user = new User(username, userType);
-            user.generateKeys();
-            user.save(password);
-            if (authService.register(username, password, userType)) {
-                System.out.println("Registo bem-sucedido!");
-            } else {
-                System.out.println("Falha no registo.");
+                AuthenticationService authService = (AuthenticationService) Naming.lookup("//localhost:1099/AuthenticationService");
+
+                User user = new User(username, userType);
+                user.generateKeys();
+                user.save(password);
+
+                // Realizar o registo no servidor
+                boolean registrationSuccess = authService.register(username, password, userType);
+
+                // Atualizar a tab e mostrar mensagem de dialog.
+                SwingUtilities.invokeLater(() -> {
+                    if (registrationSuccess) {
+                        JOptionPane.showMessageDialog(auth.this, "Registo do utilizador " + username + " bem-sucedido!");
+                        // Muda para a tela de login com sucesso.
+                        jTabbedPane1.setSelectedIndex(0);
+                    } else {
+                        JOptionPane.showMessageDialog(auth.this, "Falha no registo do utilizador " + username);
+                    }
+                });
+
+                insertUsersInList();  // Atualizar a lista de utilizadores.
+
+            } catch (Exception ex) {
+                SwingUtilities.invokeLater(() -> {
+                    JOptionPane.showMessageDialog(auth.this, "Erro: " + ex.getMessage());
+                });
+                Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (Exception ex) {
-            Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }).start(); // Iniciar a thread
     }//GEN-LAST:event_RegistoButtonActionPerformed
 
     private void usersSistemaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usersSistemaMouseClicked
         // TODO add your handling code here:
-         int selectedIndex = usersSistema.getSelectedIndex();
-         String selectedValue = (String) usersSistema.getModel().getElementAt(selectedIndex);
-         usernameLogin.setText(selectedValue);
+        int selectedIndex = usersSistema.getSelectedIndex();
+        String selectedValue = (String) usersSistema.getModel().getElementAt(selectedIndex);
+        usernameLogin.setText(selectedValue);
     }//GEN-LAST:event_usersSistemaMouseClicked
+
+    private void insertUsersInList() {
+        DefaultListModel model = new User().getUsers();
+        usersSistema.setModel(model);
+    }
 
     /**
      * @param args the command line arguments

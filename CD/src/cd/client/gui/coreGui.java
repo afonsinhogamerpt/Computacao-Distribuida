@@ -4,9 +4,12 @@
  */
 package cd.client.gui;
 
+import blockchain.utils.Block;
+import blockchain.utils.BlockChain;
+import blockchain.utils.Event;
 import cd.client.Curriculum;
-import cd.server.AuthenticationServiceImpl;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,25 +21,52 @@ import shared.User;
  * @author António
  */
 public class coreGui extends javax.swing.JFrame {
-    
-     User userLogged = null;
-     
-     
+
+    User userLogged = null;
+    blockchain.utils.BlockChain bc; // para remover!
+    private List<Event> pendingEvents = new ArrayList<>(); // apenas teste!
+
     /**
      * Creates new form coreGui
      */
     public coreGui() throws Exception {
         initComponents();
-       
+
     }
-    
-    
-    public coreGui(User u) throws IOException, Exception{
-         initComponents();
-         this.userLogged = u;
-         username.setText(u.getNome());
-         DefaultListModel model = new Curriculum().getCurriculum(userLogged);
-         curriculumList.setModel(model);
+
+    public coreGui(User u) throws IOException, Exception {
+        initComponents();
+        bc = new BlockChain(); // para remover!
+        List<Event> genesisEvents = new ArrayList<>();
+        genesisEvents.add(new Event("GENESIS", "Initial event in blockchain")); // Genesis Event
+        Block genesisBlock = new Block("00000000", genesisEvents);
+        int nonce = 0;
+        int difficulty = 4; // Adjust difficulty if needed
+        while (true) {
+            try {
+                genesisBlock.setNonce(nonce, difficulty);
+                break;
+            } catch (Exception e) {
+                nonce++;
+            }
+        }
+        bc.add(genesisBlock); // Add Genesis Block to the blockchain
+
+        this.userLogged = u;
+        username.setText(u.getNome().toUpperCase());
+        DefaultListModel model = new Curriculum().getCurriculum(userLogged);
+        curriculumList.setModel(model);
+        if (userLogged.getUserType().equals("INSTITUICAO")) {
+            InstituicaoLabel.setVisible(false);
+            InstituicaoDropDown.setVisible(false);
+        } else {
+            toLabel.setVisible(false);
+            name.setVisible(false);
+            InstituicaoVerif.setVisible(false);
+            String[] instituicaoUsers = userLogged.getInstituicaoUsersForComboBox();
+            InstituicaoDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(instituicaoUsers));
+        }
+
     }
 
     /**
@@ -53,17 +83,23 @@ public class coreGui extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        toLabel = new javax.swing.JLabel();
         event = new javax.swing.JTextField();
         name = new javax.swing.JTextField();
         addCurriculum = new javax.swing.JButton();
         show = new javax.swing.JButton();
+        InstituicaoDropDown = new javax.swing.JComboBox<>();
+        InstituicaoLabel = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        eventsList = new javax.swing.JList<>();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         curriculumList = new javax.swing.JList<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         mktList = new javax.swing.JList<>();
+        InstituicaoVerif = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -71,7 +107,7 @@ public class coreGui extends javax.swing.JFrame {
 
         jLabel1.setText("Evento");
 
-        jLabel2.setText("Nome");
+        toLabel.setText("Nome");
 
         event.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -93,6 +129,10 @@ public class coreGui extends javax.swing.JFrame {
             }
         });
 
+        InstituicaoDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        InstituicaoLabel.setText("Instituição");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -107,11 +147,13 @@ public class coreGui extends javax.swing.JFrame {
                 .addGap(15, 15, 15)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addGap(25, 25, 25)
+                    .addComponent(toLabel)
+                    .addComponent(InstituicaoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(event, javax.swing.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE)
-                    .addComponent(name))
+                    .addComponent(name)
+                    .addComponent(InstituicaoDropDown, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -120,12 +162,16 @@ public class coreGui extends javax.swing.JFrame {
                 .addGap(47, 47, 47)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
+                    .addComponent(toLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(event, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(InstituicaoDropDown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(InstituicaoLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addCurriculum)
                     .addComponent(show))
@@ -134,15 +180,28 @@ public class coreGui extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Adicionar Curriculo", jPanel2);
 
+        eventsList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane3.setViewportView(eventsList);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 380, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Curriculos", jPanel3);
@@ -162,6 +221,15 @@ public class coreGui extends javax.swing.JFrame {
 
         jScrollPane2.setViewportView(mktList);
 
+        InstituicaoVerif.setIcon(new javax.swing.ImageIcon("C:\\Users\\António\\Documents\\WORK\\DISTRIBUIDA\\CD\\src\\cd\\client\\gui\\multimedia\\verifica (1).png")); // NOI18N
+
+        jLabel3.setIcon(new javax.swing.ImageIcon("C:\\Users\\António\\Documents\\WORK\\DISTRIBUIDA\\CD\\src\\cd\\client\\gui\\multimedia\\fechar.png")); // NOI18N
+        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel3MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -175,23 +243,33 @@ public class coreGui extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane1)
                             .addComponent(jScrollPane2))
-                        .addGap(28, 28, 28))
+                        .addGap(28, 28, 28)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(username, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(InstituicaoVerif, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(username, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(username, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3)
+                            .addComponent(InstituicaoVerif))))
+                .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTabbedPane1)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -212,35 +290,56 @@ public class coreGui extends javax.swing.JFrame {
     }//GEN-LAST:event_eventActionPerformed
 
     private void addCurriculumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCurriculumActionPerformed
-         try {
-             // TODO add your handling code here:
-             if(userLogged.getUserType().equals("INSTITUICAO")){
-                Curriculum cur = new Curriculum();
-                cur.addCurriculum((name.getText()+ " " + event.getText()), userLogged);
-                DefaultListModel model = new Curriculum().getCurriculum(userLogged);
-                curriculumList.setModel(model);
-                 User toUser = new User("","NORMAL");
-                 toUser.loadPublic();
+        try {
+            // TODO add your handling code here:
+            if (userLogged.getUserType().equals("INSTITUICAO")) {
+                Curriculum cur = new Curriculum(name.getText()); // utilizador a que vai ser associado o evento.
+                //cur.addCurriculum((name.getText()+ " " + event.getText()), userLogged);
+                cur.addEvent(event.getText(), userLogged, bc, pendingEvents);
+
+                // Obter os eventos do usuário
+                List<String> userEvents = cur.getUserEvents(userLogged, bc);
+
+                // Criar o DefaultListModel e adicionar os eventos
+                DefaultListModel<String> model = new DefaultListModel<>();
+                for (String event : userEvents) {
+                    model.addElement(event);
+                }
+
+                System.out.println(bc.toString());
+
+                // Atualizar o componente de lista na interface gráfica
+                eventsList.setModel(model);
+                //DefaultListModel model = new Curriculum().getCurriculum(userLogged);
+                //curriculumList.setModel(model);
+                // User toUser = new User("","NORMAL");
+                // toUser.loadPublic();
             }
-             
-         } catch (Exception ex) {
-             Logger.getLogger(coreGui.class.getName()).log(Level.SEVERE, null, ex);
-         }
-        
+
+        } catch (Exception ex) {
+            Logger.getLogger(coreGui.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }//GEN-LAST:event_addCurriculumActionPerformed
 
     private void showActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showActionPerformed
         // TODO add your handling code here:
-        
-         try {
-             Curriculum cur = new Curriculum();
-             //cur.getCurriculumList(userLogged);
-             System.out.println(cur.toString());
-               
-         } catch (Exception ex) {
-             Logger.getLogger(coreGui.class.getName()).log(Level.SEVERE, null, ex);
-         }
+
+        try {
+            Curriculum cur = new Curriculum();
+            //cur.getCurriculumList(userLogged);
+            System.out.println(cur.toString());
+
+        } catch (Exception ex) {
+            Logger.getLogger(coreGui.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_showActionPerformed
+
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+        // TODO add your handling code here:
+        new auth().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jLabel3MouseClicked
 
     /**
      * @param args the command line arguments
@@ -282,21 +381,27 @@ public class coreGui extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> InstituicaoDropDown;
+    private javax.swing.JLabel InstituicaoLabel;
+    private javax.swing.JLabel InstituicaoVerif;
     private javax.swing.JButton addCurriculum;
     private javax.swing.JList<String> curriculumList;
     private javax.swing.JTextField event;
+    private javax.swing.JList<String> eventsList;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JList<String> mktList;
     private javax.swing.JTextField name;
     private javax.swing.JButton show;
+    private javax.swing.JLabel toLabel;
     private javax.swing.JLabel username;
     // End of variables declaration//GEN-END:variables
 }

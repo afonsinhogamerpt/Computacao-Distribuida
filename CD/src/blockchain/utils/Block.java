@@ -12,10 +12,14 @@
 //::                                                                         ::
 //::                                                               (c)2022   ::
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-//////////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////////
 package blockchain.utils;
 
 import java.io.Serializable;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 import miner.Miner;
@@ -32,16 +36,53 @@ public class Block implements Serializable, Comparable<Block> {
 
     String previousHash; // link to previous block
     String merkleRoot;   // merkleRoot in the block
-    List<String> transactions; // transações do bloco (devem ser guardadas em separado)
+    //List<String> transactions; // transações do bloco (devem ser guardadas em separado)
+    private List<Event> events; // Lista de eventos no bloco
+    private String signature; // Assinatura da instituição
     int nonce;           // proof of work 
     String currentHash;  // Hash of block
 
-    public Block(String previousHash, List<String> transactions) {
+    public Block(String previousHash, List<Event> events) {
         this.previousHash = previousHash;
-        this.transactions = transactions;
-        MerkleTree mkt = new MerkleTree(transactions);
+        this.events = events;
+        //MerkleTree mkt = new MerkleTree(transactions);
+        MerkleTree mkt = new MerkleTree(events.stream()
+                .map(event -> event.getEncryptedEvent())
+                .toList());
         this.merkleRoot = mkt.getRoot();
     }
+
+    /////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////
+    ///// FUNCOES NOVAS    //////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////
+
+        public void signBlock(PrivateKey privateKey) throws Exception {
+        String dataToSign = previousHash + merkleRoot;
+        Signature rsa = Signature.getInstance("SHA256withRSA");
+        rsa.initSign(privateKey);
+        rsa.update(dataToSign.getBytes());
+        this.signature = Base64.getEncoder().encodeToString(rsa.sign());
+    }
+
+    public boolean verifySignature(PublicKey publicKey) throws Exception {
+        String dataToVerify = previousHash + merkleRoot;
+        Signature rsa = Signature.getInstance("SHA256withRSA");
+        rsa.initVerify(publicKey);
+        rsa.update(dataToVerify.getBytes());
+        return rsa.verify(Base64.getDecoder().decode(signature));
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////
+    ///// FUNCOES NOVAS    //////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    
 
     public void setNonce(int nonce, int zeros) throws Exception {
         this.nonce = nonce;
@@ -52,7 +93,7 @@ public class Block implements Serializable, Comparable<Block> {
         if (!currentHash.startsWith(prefix)) {
             throw new Exception(nonce + " not valid Hash=" + currentHash);
         }
-        
+
     }
 
     public String getMinerData() {
@@ -63,10 +104,9 @@ public class Block implements Serializable, Comparable<Block> {
         return merkleRoot;
     }
 
-    public List<String> transactions() {
-        return transactions;
-    }
-
+    //   public List<String> transactions() {
+    //      return transactions;
+    //  }
     public String getPreviousHash() {
         return previousHash;
     }
@@ -93,25 +133,26 @@ public class Block implements Serializable, Comparable<Block> {
     }
 
     public String getHeaderString() {
-        return    "prev Hash: " + previousHash +
-                "\nMkt Root : " + merkleRoot+
-                "\nnonce    : " + nonce+
-                "\ncurr Hash: " + currentHash;
-    }
-    public String getTransactionsString() {
-        StringBuilder txt = new StringBuilder();
-        for (String transaction : transactions) {
-            txt.append(transaction+"\n");
-        }
-        return txt.toString();
+        return "prev Hash: " + previousHash
+                + "\nMkt Root : " + merkleRoot
+                + "\nnonce    : " + nonce
+                + "\ncurr Hash: " + currentHash;
     }
 
+    // public String getTransactionsString() {
+    //     StringBuilder txt = new StringBuilder();
+    //    for (String transaction : transactions) {
+    //         txt.append(transaction + "\n");
+    //     }
+    //     return txt.toString();
+    //   }
     public boolean isValid() {
         return currentHash.equals(calculateHash());
     }
 
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     private static final long serialVersionUID = 202208220923L;
+
     //:::::::::::::::::::::::::::  Copyright(c) M@nso  2022  :::::::::::::::::::
     ///////////////////////////////////////////////////////////////////////////
 
@@ -145,7 +186,6 @@ public class Block implements Serializable, Comparable<Block> {
         return Objects.equals(this.currentHash, other.currentHash);
     }
 
-    
     @Override
     public int compareTo(Block o) {
         return this.currentHash.compareTo(o.currentHash);

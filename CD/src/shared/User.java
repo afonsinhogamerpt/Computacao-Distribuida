@@ -12,6 +12,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import javax.swing.DefaultListModel;
 
 /**
@@ -22,6 +23,7 @@ import javax.swing.DefaultListModel;
  * @author António Gonçalves e Afonso Costa
  */
 public class User implements Serializable {
+
     private static final long serialVersionUID = 1L;
     private PrivateKey privKey;
     private PublicKey pubKey;
@@ -51,11 +53,13 @@ public class User implements Serializable {
         this.privKey = kp.getPrivate();
         this.pubKey = kp.getPublic();
     }
-   
-    /***
+
+    /**
+     * *
      * Salva o utilizador
+     *
      * @param password
-     * @throws Exception 
+     * @throws Exception
      */
     public void save(String password) throws Exception {
         byte[] secret = SecurityUtils.encrypt(this.privKey.getEncoded(), password);
@@ -68,14 +72,15 @@ public class User implements Serializable {
         Files.write(Path.of(this.nome + ".sim"), sim);
         Files.write(Path.of(this.nome + ".priv"), secret);
         Files.write(Path.of(this.nome + ".pub"), this.pubKey.getEncoded());
-        Files.write(Path.of(this.nome + ".type"), userTypeData);  
+        Files.write(Path.of(this.nome + ".type"), userTypeData);
     }
 
-    
-    /***
+    /**
+     * *
      * Carrega o utilizaddor
+     *
      * @param password
-     * @throws Exception 
+     * @throws Exception
      */
     public void load(String password) throws Exception {
         byte[] privData = Files.readAllBytes(Path.of(this.nome + ".priv"));
@@ -90,9 +95,9 @@ public class User implements Serializable {
         this.pubKey = SecurityUtils.getPublicKey(pubData);
         this.userType = new String(userTypeData);
     }
-    
-    public void loadPublic() throws Exception{
-         //ler a publica
+
+    public void loadPublic() throws Exception {
+        //ler a publica
         byte[] pubData = Files.readAllBytes(Path.of(this.nome + ".pub"));
         this.pubKey = SecurityUtils.getPublicKey(pubData);
     }
@@ -112,14 +117,16 @@ public class User implements Serializable {
     public String getNome() {
         return nome;
     }
-    
+
     public PrivateKey getPriv() {
         return privKey;
     }
 
-    /***
+    /**
+     * *
      * Usado para a lista de utilizadores encontrados no sistema.
-     * @return 
+     *
+     * @return
      */
     public DefaultListModel getUsers() {
         DefaultListModel model = new DefaultListModel();
@@ -131,5 +138,41 @@ public class User implements Serializable {
             }
         }
         return model;
+    }
+
+    /***
+     * Usado para a lista de utilizadores com tipo instituicao encontrados no sistema.
+     * @return 
+     */
+    public String[] getInstituicaoUsersForComboBox() {
+        List<String> instituicaoUsers = new ArrayList<>();
+        File rootDir = new File(".");
+        File[] files = rootDir.listFiles();
+
+        if (files == null) {
+            return new String[0]; // Retorna um array vazio se não houver ficheiros
+        }
+
+        for (File file : files) {
+            if (file.getName().endsWith(".type")) {
+                try {
+                    // Ler o conteúdo do ficheiro .type
+                    byte[] userTypeData = Files.readAllBytes(file.toPath());
+                    String userType = new String(userTypeData).trim();
+
+                    // Verificar se é do tipo INSTITUICAO
+                    if ("INSTITUICAO".equals(userType)) {
+                        // O nome do utilizador é o nome do ficheiro sem a extensão .type
+                        String userName = file.getName().replace(".type", "");
+                        instituicaoUsers.add(userName);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace(); // Apenas para debug, idealmente use logs
+                }
+            }
+        }
+
+        // Converte a lista para um array de Strings
+        return instituicaoUsers.toArray(new String[0]);
     }
 }

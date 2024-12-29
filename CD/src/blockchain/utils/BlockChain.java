@@ -12,7 +12,7 @@
 //::                                                                         ::
 //::                                                               (c)2022   ::
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-//////////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////////
 package blockchain.utils;
 
 import java.io.FileInputStream;
@@ -20,6 +20,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -59,7 +60,8 @@ public class BlockChain implements Serializable {
         //hash of the last in the list
         return chain.get(chain.size() - 1).currentHash;
     }
-     /**
+
+    /**
      * gets the last block hash of the chain
      *
      * @return last hash in the chain
@@ -93,10 +95,10 @@ public class BlockChain implements Serializable {
     public Block get(int index) {
         return chain.get(index);
     }
-     public int getSize() {
+
+    public int getSize() {
         return chain.size();
     }
-
 
     public String toString() {
         StringBuilder txt = new StringBuilder();
@@ -141,8 +143,13 @@ public class BlockChain implements Serializable {
         return true;
     }
 
+    public List<Block> getBlocks() {
+        return new ArrayList<>(chain);
+    }
+
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     private static final long serialVersionUID = 202208221009L;
     //:::::::::::::::::::::::::::  Copyright(c) M@nso  2022  :::::::::::::::::::
-    ///////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////
 }
