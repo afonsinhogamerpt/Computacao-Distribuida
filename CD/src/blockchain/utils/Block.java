@@ -122,7 +122,7 @@ public class Block implements Serializable, Comparable<Block> {
     
 
     public String calculateHash() {
-        return Hash.getHash(nonce + previousHash + getMinerData());
+        return Hash.getHash(nonce + getMinerData());
     }
 
     public String getCurrentHash() {
@@ -143,6 +143,7 @@ public class Block implements Serializable, Comparable<Block> {
                 + "\nMkt Root : " + merkleRoot
                 + "\nnonce    : " + nonce
                 + "\ncurr Hash: " + currentHash;
+               
     }
 
     // public String getTransactionsString() {

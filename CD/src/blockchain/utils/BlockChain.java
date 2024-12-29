@@ -94,11 +94,15 @@ System.out.println("New Block Hash: " + newBlock.getCurrentHash());
         }
         System.out.println("teste2");
         //verify link
-        if (getLastBlockHash().compareTo(newBlock.previousHash) != 0) {
-            throw new Exception("Previous hash not combine");
+        if(!chain.isEmpty()){
+            if (getLastBlockHash().compareTo(newBlock.previousHash) != 0) {
+                throw new Exception("Previous hash not combine");
+            } 
+            //add new block to the chain
+            chain.add(newBlock);
         }
-        //add new block to the chain
         chain.add(newBlock);
+        System.out.println("Bloco adicionado");
     }
 
     public Block get(int index) {

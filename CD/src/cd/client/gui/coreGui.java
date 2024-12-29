@@ -40,7 +40,7 @@ public class coreGui extends javax.swing.JFrame {
         initComponents();
         
         try{
-            core.load(fileCurriculumVitae);
+            core = core.load(fileCurriculumVitae);
         }catch(Exception e){
             core = new mainCore();
         }

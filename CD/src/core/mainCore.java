@@ -28,7 +28,8 @@ public class mainCore implements Serializable {
     blockchain.utils.BlockChain bc;
     private List<Event> pendingEvents;
     public static int DIFICULTY = 5; // pode ser ajustada consoante o tempo que os mineiros vao demorando na rede.
-    
+     public static String fileCurriculumVitae = "fileCurriculumVitae.obj"; 
+     
     public mainCore() throws Exception {
         try{
             User u = new User("jorge", "INSTITUICAO");
@@ -39,12 +40,21 @@ public class mainCore implements Serializable {
             str.add(ola + "");
             Block block = new Block(str, "0");
             block.setNonce(0);
+            System.out.println(block.calculateHash());
             System.out.println(block.getHeaderString());
+            bc = new BlockChain();
+            bc.save(fileCurriculumVitae);
+            bc.add(block);
         }catch (Exception e){
             System.out.println("erro");
         }
         
     }
+    
+    /*public mainCore(User u) throws Exception{
+        
+    }*/
+    
     
     
  
