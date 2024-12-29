@@ -1,6 +1,6 @@
 package shared;
 
-import cd.client.Curriculum;
+import core.Curriculum;
 import cd.utils.SecurityUtils;
 import java.io.File;
 import java.io.Serializable;

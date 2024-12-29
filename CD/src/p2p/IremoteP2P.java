@@ -18,6 +18,7 @@ package p2p;
 
 import blockchain.utils.Block;
 import blockchain.utils.BlockChain;
+import core.Event;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -39,9 +40,9 @@ public interface IremoteP2P extends Remote {
     //::::::::::: T R A N S A C T IO N S  :::::::::::
     public int getTransactionsSize() throws RemoteException;
 
-    public void addTransaction(String data) throws RemoteException;
+    public void addTransaction(Event data) throws RemoteException;
 
-    public List<String> getTransactions() throws RemoteException;
+    public List<Event> getTransactions() throws RemoteException;
     
     public void removeTransactions(List<String> transactions) throws RemoteException;
 

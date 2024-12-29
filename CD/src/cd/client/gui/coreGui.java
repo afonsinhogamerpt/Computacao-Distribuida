@@ -6,8 +6,9 @@ package cd.client.gui;
 
 import blockchain.utils.Block;
 import blockchain.utils.BlockChain;
-import blockchain.utils.Event;
-import cd.client.Curriculum;
+import core.Event;
+import core.Curriculum;
+import core.mainCore;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +24,10 @@ import shared.User;
 public class coreGui extends javax.swing.JFrame {
 
     User userLogged = null;
-    blockchain.utils.BlockChain bc; // para remover!
-    private List<Event> pendingEvents = new ArrayList<>(); // apenas teste!
+    public static String fileCurriculumVitae = "fileCurriculumVitae.obj"; // é suposto remover a seguir quando estiver no server
+    mainCore core;
+    //blockchain.utils.BlockChain bc; // para remover!
+    //private List<Event> pendingEvents = new ArrayList<>(); // apenas teste!
 
     /**
      * Creates new form coreGui
@@ -36,26 +39,12 @@ public class coreGui extends javax.swing.JFrame {
 
     public coreGui(User u) throws IOException, Exception {
         initComponents();
-        bc = new BlockChain(); // para remover!
-        List<Event> genesisEvents = new ArrayList<>();
-        genesisEvents.add(new Event("GENESIS", "Initial event in blockchain")); // Genesis Event
-        Block genesisBlock = new Block("00000000", genesisEvents);
-        int nonce = 0;
-        int difficulty = 4; // Adjust difficulty if needed
-        while (true) {
-            try {
-                genesisBlock.setNonce(nonce, difficulty);
-                break;
-            } catch (Exception e) {
-                nonce++;
-            }
-        }
-        bc.add(genesisBlock); // Add Genesis Block to the blockchain
-
+        core = new mainCore();
+        
         this.userLogged = u;
         username.setText(u.getNome().toUpperCase());
-        DefaultListModel model = new Curriculum().getCurriculum(userLogged);
-        curriculumList.setModel(model);
+        //DefaultListModel model = new Curriculum().getCurriculum(userLogged);
+        //curriculumList.setModel(model);
         if (userLogged.getUserType().equals("INSTITUICAO")) {
             InstituicaoLabel.setVisible(false);
             InstituicaoDropDown.setVisible(false);
@@ -293,23 +282,26 @@ public class coreGui extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
             if (userLogged.getUserType().equals("INSTITUICAO")) {
-                Curriculum cur = new Curriculum(name.getText()); // utilizador a que vai ser associado o evento.
+                
+                User userTo = new User(name.getText(), "NORMAL");
+                userTo.loadPublic();
+                
+                core.addEvent(event.getText(), userLogged, userTo);
+                
+                //Curriculum cur = new Curriculum(name.getText()); // utilizador a que vai ser associado o evento.
                 //cur.addCurriculum((name.getText()+ " " + event.getText()), userLogged);
-                cur.addEvent(event.getText(), userLogged, bc, pendingEvents);
+                //cur.addEvent(event.getText(), userLogged, bc, pendingEvents);
 
                 // Obter os eventos do usuário
-                List<String> userEvents = cur.getUserEvents(userLogged, bc);
-
+                //List<String> userEvents = cur.getUserEvents(userLogged, bc);
                 // Criar o DefaultListModel e adicionar os eventos
-                DefaultListModel<String> model = new DefaultListModel<>();
-                for (String event : userEvents) {
-                    model.addElement(event);
-                }
-
-                System.out.println(bc.toString());
+//                DefaultListModel<String> model = new DefaultListModel<>();
+//                for (String event : userEvents) {
+//                    model.addElement(event);
+//                }
+//       eventsList.setModel(model);
 
                 // Atualizar o componente de lista na interface gráfica
-                eventsList.setModel(model);
                 //DefaultListModel model = new Curriculum().getCurriculum(userLogged);
                 //curriculumList.setModel(model);
                 // User toUser = new User("","NORMAL");

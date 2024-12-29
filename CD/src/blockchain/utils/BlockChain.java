@@ -76,6 +76,11 @@ public class BlockChain implements Serializable {
     }
 
     public void add(Block newBlock) throws Exception {
+        
+        System.out.println("Last Block Hash: " + getLastBlockHash());
+System.out.println("New Block Previous Hash: " + newBlock.getPreviousHash());
+System.out.println("Merkle Root: " + newBlock.getMerkleRoot());
+System.out.println("New Block Hash: " + newBlock.getCurrentHash());
         if (chain.contains(newBlock)) {
             throw new Exception("Duplicated Block");
         }

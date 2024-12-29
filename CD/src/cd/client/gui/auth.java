@@ -310,30 +310,14 @@ public class auth extends javax.swing.JFrame {
                     }
                 });
 
-            } catch (NotBoundException ex) {
-                // Caso seja erro de servidor
-                SwingUtilities.invokeLater(() -> {
-                    JOptionPane.showMessageDialog(auth.this, "Erro de servidor " + ex.getMessage());
-                });
-                Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (MalformedURLException ex) {
-                SwingUtilities.invokeLater(() -> {
-                    JOptionPane.showMessageDialog(auth.this, "Erro" + ex.getMessage());
-                });
-                Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (RemoteException ex) {
-                SwingUtilities.invokeLater(() -> {
-                    JOptionPane.showMessageDialog(auth.this, "Erro" + ex.getMessage());
-                });
-                Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
+            } catch (IOException ex) { // Captura todas as exceções derivadas de IOException
                 SwingUtilities.invokeLater(() -> {
                     JOptionPane.showMessageDialog(auth.this, "Erro de IO: " + ex.getMessage());
                 });
                 Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (Exception ex) {
+            } catch (NotBoundException ex) { // Mantemos o NotBoundException porque ele não é derivado de IOException
                 SwingUtilities.invokeLater(() -> {
-                    JOptionPane.showMessageDialog(auth.this, "Erro" + ex.getMessage());
+                    JOptionPane.showMessageDialog(auth.this, "Erro: " + ex.getMessage());
                 });
                 Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
             }

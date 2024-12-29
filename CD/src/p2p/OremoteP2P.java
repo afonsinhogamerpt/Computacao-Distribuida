@@ -17,6 +17,7 @@ package p2p;
 
 import blockchain.utils.Block;
 import blockchain.utils.BlockChain;
+import core.Event;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class OremoteP2P extends UnicastRemoteObject implements IremoteP2P {
     String address;
     CopyOnWriteArrayList<IremoteP2P> network;
     // Set - conjunto de elementos não repetidos para acesso concorrente
-    CopyOnWriteArraySet<String> transactions;
+    CopyOnWriteArraySet<Event> events;
     P2Plistener p2pListener;
     //objeto mineiro concorrente e distribuido
     Miner myMiner;
@@ -48,7 +49,7 @@ public class OremoteP2P extends UnicastRemoteObject implements IremoteP2P {
         super(RMI.getAdressPort(address));
         this.address = address;
         this.network = new CopyOnWriteArrayList<>();
-        transactions = new CopyOnWriteArraySet<>();
+        events = new CopyOnWriteArraySet<>();
         this.myMiner = new Miner(listener);
         this.myBlockchain = new BlockChain(BLOCHAIN_FILENAME);
         this.p2pListener = listener;
@@ -119,18 +120,18 @@ public class OremoteP2P extends UnicastRemoteObject implements IremoteP2P {
     //::::::::            T R A N S A C T I O N S       ::::::::::::::::::
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     public int getTransactionsSize() throws RemoteException {
-        return transactions.size();
+        return events.size();
     }
 
-    public void addTransaction(String data) throws RemoteException {
+    public void addTransaction(Event data) throws RemoteException {
         //seja tiver a transacao não faz nada
-        if (transactions.contains(data)) {
+        if (events.contains(data)) {
             p2pListener.onTransaction("Transaçao repetida " + data);
             //sair
             return;
         }
         //Adicionar a transaçao ao no local
-        transactions.add(data);
+        events.add(data);
         //Adicionar a transacao aos nos da rede
         for (IremoteP2P iremoteP2P : network) {
             iremoteP2P.addTransaction(data);
@@ -139,18 +140,18 @@ public class OremoteP2P extends UnicastRemoteObject implements IremoteP2P {
     }
 
     @Override
-    public List<String> getTransactions() throws RemoteException {
-        return new ArrayList<>(transactions);
+    public List<Event> getTransactions() throws RemoteException {
+        return new ArrayList<>(events);
     }
 
     @Override
     public void synchronizeTransactions(IremoteP2P node) throws RemoteException {
         //tamanho anterior
-        int oldsize = transactions.size();
+        int oldsize = events.size();
         p2pListener.onMessage("sinchronizeTransactions", node.getAdress());
         // juntar as transacoes todas (SET elimina as repetidas)
-        this.transactions.addAll(node.getTransactions());
-        int newSize = transactions.size();
+        this.events.addAll(node.getTransactions());
+        int newSize = events.size();
         //se o tamanho for incrementado
         if (oldsize < newSize) {
             p2pListener.onMessage("sinchronizeTransactions", "tamanho diferente");
@@ -174,12 +175,12 @@ public class OremoteP2P extends UnicastRemoteObject implements IremoteP2P {
     @Override
     public void removeTransactions(List<String> myTransactions) throws RemoteException {
         //remover as transações da lista atural
-        transactions.removeAll(myTransactions);
+        events.removeAll(myTransactions);
         p2pListener.onTransaction("remove " + myTransactions.size() + "transactions");
         //propagar as remoções
         for (IremoteP2P iremoteP2P : network) {
             //se houver algum elemento em comum nas transações remotas
-            if (iremoteP2P.getTransactions().retainAll(transactions)) {
+            if (iremoteP2P.getTransactions().retainAll(events)) {
                 //remover as transaçoies
                 iremoteP2P.removeTransactions(myTransactions);
             }
@@ -316,13 +317,18 @@ public class OremoteP2P extends UnicastRemoteObject implements IremoteP2P {
         }
     }
     
+//    @Override
+//    public List<String> getBlockchainTransactions()throws RemoteException{
+//        ArrayList<String> allTransactions = new ArrayList<>();
+//        for(Block b: myBlockchain.getChain()){
+//            allTransactions.addAll(b.transactions());
+//        }
+//        return allTransactions;
+//    }
+
     @Override
-    public List<String> getBlockchainTransactions()throws RemoteException{
-        ArrayList<String> allTransactions = new ArrayList<>();
-        for(Block b: myBlockchain.getChain()){
-            allTransactions.addAll(b.transactions());
-        }
-        return allTransactions;
+    public List<String> getBlockchainTransactions() throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

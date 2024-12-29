@@ -17,6 +17,7 @@ package p2p;
 
 import blockchain.utils.Block;
 import blockchain.utils.BlockChain;
+import core.Event;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.net.DatagramPacket;
@@ -469,7 +470,7 @@ public class NodeP2PGui extends javax.swing.JFrame implements P2Plistener {
         new Thread(() -> {
             try {
                 //fazer um bloco
-                List<String> blockTransactions = myremoteObject.getTransactions();
+                List<Event> blockTransactions = myremoteObject.getTransactions();
                 if (blockTransactions.size() < 0) {
                     return;
                 }

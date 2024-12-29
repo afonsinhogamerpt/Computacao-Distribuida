@@ -15,6 +15,7 @@
  //////////////////////////////////////////////////////////////////////////////
 package blockchain.utils;
 
+import core.Event;
 import java.io.Serializable;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -22,7 +23,7 @@ import java.security.Signature;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
-import miner.Miner;
+import java.util.stream.Collectors;
 
 /**
  * Created on 22/08/2022, 09:23:49
@@ -36,28 +37,29 @@ public class Block implements Serializable, Comparable<Block> {
 
     String previousHash; // link to previous block
     String merkleRoot;   // merkleRoot in the block
-    //List<String> transactions; // transações do bloco (devem ser guardadas em separado)
-    private List<Event> events; // Lista de eventos no bloco
-    private String signature; // Assinatura da instituição
-    int nonce;           // proof of work 
     String currentHash;  // Hash of block
+    private List<Event> events; // Lista de eventos no bloco
+    int nonce;           // proof of work 
+    private String signature; // Assinatura da instituição pois cada bloco tem de ser adicionado por uma instituição valida.
+    //List<String> transactions; // transações do bloco (devem ser guardadas em separado)
 
     public Block(String previousHash, List<Event> events) {
         this.previousHash = previousHash;
         this.events = events;
         //MerkleTree mkt = new MerkleTree(transactions);
         MerkleTree mkt = new MerkleTree(events.stream()
-                .map(event -> event.getEncryptedEvent())
+                .map(event -> event.event)
                 .toList());
         this.merkleRoot = mkt.getRoot();
+        this.currentHash = calculateHash();
     }
 
     /////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////
     ///// FUNCOES NOVAS    //////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////
-
-        public void signBlock(PrivateKey privateKey) throws Exception {
+ 
+    public void signBlock(PrivateKey privateKey) throws Exception {
         String dataToSign = previousHash + merkleRoot;
         Signature rsa = Signature.getInstance("SHA256withRSA");
         rsa.initSign(privateKey);
@@ -82,19 +84,6 @@ public class Block implements Serializable, Comparable<Block> {
     ///// FUNCOES NOVAS    //////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////
 
-    
-
-    public void setNonce(int nonce, int zeros) throws Exception {
-        this.nonce = nonce;
-        //calcular o hash
-        this.currentHash = calculateHash();
-        //calcular o prefixo
-        String prefix = String.format("%0" + zeros + "d", 0);
-        if (!currentHash.startsWith(prefix)) {
-            throw new Exception(nonce + " not valid Hash=" + currentHash);
-        }
-
-    }
 
     public String getMinerData() {
         return previousHash + merkleRoot;
@@ -115,8 +104,15 @@ public class Block implements Serializable, Comparable<Block> {
         return nonce;
     }
 
+    public void setNonce(int nonce) {
+        this.nonce = nonce;
+        //calcular o hash
+        this.currentHash = Hash.getHash(nonce + getMinerData());
+    }
+    
+
     public String calculateHash() {
-        return Miner.getHash(getMinerData(), nonce);
+        return Hash.getHash(nonce + previousHash + getMinerData());
     }
 
     public String getCurrentHash() {

@@ -2,10 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cd.client;
+package core;
 
 import blockchain.utils.Block;
-import blockchain.utils.Event;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -178,7 +177,7 @@ public class Curriculum {
         User uTo = new User(to, "NORMAL");
         uTo.loadPublic();
 
-        // Criptografa o evento com a chave pública do utilizador
+        // encripta o evento com a chave pública do utilizador para que seja adicionado.
         byte[] encryptedEvent = utils.SecurityUtils.encrypt(event.getBytes(), uTo.getPub());
         String encodedEvent = Base64.getEncoder().encodeToString(encryptedEvent);
         Event newEvent = new Event(uTo.getPub().toString(), encodedEvent);
@@ -195,7 +194,7 @@ public class Curriculum {
             int difficulty = 4; // Number of leading zeros required in the hash
             while (true) {
                 try {
-                    newBlock.setNonce(nonce, difficulty);
+                    //newBlock.setNonce(nonce, difficulty);
                     break; // Exit loop when a valid nonce is found
                 } catch (Exception e) {
                     nonce++; // Increment nonce and retry
@@ -215,18 +214,18 @@ public class Curriculum {
      * @return
      * @throws Exception
      */
-    public List<String> getUserEvents(User user, blockchain.utils.BlockChain bc) throws Exception {
-        List<String> userEvents = new ArrayList<>();
-        for (Block block : bc.getBlocks()) {
-            for (Event event : block.getEvents()) {
-                if (event.getUserPublicKey().equals(user.getPub().toString())) {
-                    byte[] encryptedEvent = Base64.getDecoder().decode(event.getEncryptedEvent());
-                    String decryptedEvent = new String(utils.SecurityUtils.decrypt(encryptedEvent, user.getPriv()));
-                    userEvents.add(decryptedEvent);
-                }
-            }
-        }
-        return userEvents;
-    }
+//    public List<String> getUserEvents(User user, blockchain.utils.BlockChain bc) throws Exception {
+//        List<String> userEvents = new ArrayList<>();
+//        for (Block block : bc.getBlocks()) {
+//            for (Event event : block.getEvents()) {
+//                if (event.getUserPublicKey().equals(user.getPub().toString())) {
+//                    byte[] encryptedEvent = Base64.getDecoder().decode(event.getEncryptedEvent());
+//                    String decryptedEvent = new String(utils.SecurityUtils.decrypt(encryptedEvent, user.getPriv()));
+//                    userEvents.add(decryptedEvent);
+//                }
+//            }
+//        }
+//        return userEvents;
+//    }
 
 }
