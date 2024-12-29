@@ -15,6 +15,7 @@
  //////////////////////////////////////////////////////////////////////////////
 package blockchain.utils;
 
+import core.Event;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -33,7 +34,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class BlockChain implements Serializable {
 
     CopyOnWriteArrayList<Block> chain;
-
+    
     public BlockChain() {
         chain = new CopyOnWriteArrayList<>();
     }
@@ -84,11 +85,14 @@ System.out.println("New Block Hash: " + newBlock.getCurrentHash());
         if (chain.contains(newBlock)) {
             throw new Exception("Duplicated Block");
         }
+        
+        System.out.println("teste");
 
         //verify block
         if (!newBlock.isValid()) {
             throw new Exception("Invalid Block");
         }
+        System.out.println("teste2");
         //verify link
         if (getLastBlockHash().compareTo(newBlock.previousHash) != 0) {
             throw new Exception("Previous hash not combine");

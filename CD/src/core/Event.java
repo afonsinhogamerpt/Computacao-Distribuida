@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.security.PublicKey;
 import java.util.Base64;
 import shared.User;
+import utils.SecurityUtils;
 
 /**
  *

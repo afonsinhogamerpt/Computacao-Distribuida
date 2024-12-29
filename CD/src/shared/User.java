@@ -1,7 +1,7 @@
 package shared;
 
 import core.Curriculum;
-import cd.utils.SecurityUtils;
+import utils.SecurityUtils;
 import java.io.File;
 import java.io.Serializable;
 import java.nio.file.Files;
@@ -48,8 +48,8 @@ public class User implements Serializable {
     }
 
     public void generateKeys() throws Exception {
-        KeyPair kp = SecurityUtils.generateRSAKeyPair(2048);
-        this.simKey = SecurityUtils.generateAESKey(256);
+        KeyPair kp = utils.SecurityUtils.generateRSAKeyPair(2048);
+        this.simKey = utils.SecurityUtils.generateAESKey(256);
         this.privKey = kp.getPrivate();
         this.pubKey = kp.getPublic();
     }
@@ -62,8 +62,8 @@ public class User implements Serializable {
      * @throws Exception
      */
     public void save(String password) throws Exception {
-        byte[] secret = SecurityUtils.encrypt(this.privKey.getEncoded(), password);
-        byte[] sim = SecurityUtils.encrypt(this.simKey.getEncoded(), password);
+        byte[] secret = utils.SecurityUtils.encrypt(this.privKey.getEncoded(), password);
+        byte[] sim = utils.SecurityUtils.encrypt(this.simKey.getEncoded(), password);
 
         // Codificar o userType em formato simples (por exemplo, texto) para ser salvo
         byte[] userTypeData = this.userType.getBytes();
@@ -88,18 +88,18 @@ public class User implements Serializable {
         byte[] pubData = Files.readAllBytes(Path.of(this.nome + ".pub"));
         byte[] userTypeData = Files.readAllBytes(Path.of(this.nome + ".type"));
 
-        privData = SecurityUtils.decrypt(privData, password);
-        simData = SecurityUtils.decrypt(simData, password);
+        privData = utils.SecurityUtils.decrypt(privData, password);
+        simData = utils.SecurityUtils.decrypt(simData, password);
 
-        this.privKey = SecurityUtils.getPrivateKey(privData);
-        this.pubKey = SecurityUtils.getPublicKey(pubData);
+        this.privKey = utils.SecurityUtils.getPrivateKey(privData);
+        this.pubKey = utils.SecurityUtils.getPublicKey(pubData);
         this.userType = new String(userTypeData);
     }
 
     public void loadPublic() throws Exception {
         //ler a publica
         byte[] pubData = Files.readAllBytes(Path.of(this.nome + ".pub"));
-        this.pubKey = SecurityUtils.getPublicKey(pubData);
+        this.pubKey = utils.SecurityUtils.getPublicKey(pubData);
     }
 
     public String getPublicKeyEncoded() {

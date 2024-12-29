@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 import shared.User;
@@ -27,10 +28,26 @@ public class mainCore implements Serializable {
     blockchain.utils.BlockChain bc;
     private List<Event> pendingEvents;
     public static int DIFICULTY = 5; // pode ser ajustada consoante o tempo que os mineiros vao demorando na rede.
-
+    
     public mainCore() throws Exception {
-        pendingEvents = new ArrayList<>();
+        try{
+            User u = new User("jorge", "INSTITUICAO");
+            pendingEvents = new ArrayList<>();
+            List<String> str = new ArrayList<>();
+            u.loadPublic();
+            PublicKey ola = u.getPub();
+            str.add(ola + "");
+            Block block = new Block(str, "0");
+            block.setNonce(0);
+            System.out.println(block.getHeaderString());
+        }catch (Exception e){
+            System.out.println("erro");
+        }
+        
     }
+    
+    
+ 
 
     public void save(String fileName) throws IOException {
         try (ObjectOutputStream out = new ObjectOutputStream(
@@ -39,7 +56,7 @@ public class mainCore implements Serializable {
         }
     }
 
-    public static mainCore load(String fileName) throws IOException, ClassNotFoundException {
+    public mainCore load(String fileName) throws IOException, ClassNotFoundException {
         try (ObjectInputStream in = new ObjectInputStream(
                 new FileInputStream(fileName))) {
             return (mainCore) in.readObject(); // isto só funciona porque é serializable.
@@ -53,7 +70,9 @@ public class mainCore implements Serializable {
 
         // Add the event to the pending list
         pendingEvents.add(newEvent);
-
+        
+        
+        
         // When the pending list reaches 8 events, create a block
         if (pendingEvents.size() >= 8) {
             // Generate the Merkle root for the events
@@ -67,7 +86,7 @@ public class mainCore implements Serializable {
 
 
             // Mine the nonce for the block
-            int nonce = MinerConcurrent.getNonce(dataToMine, DIFICULTY);
+            int nonce = MinerConcurrent.getNonce(dataToMine, 5);
 
             // Create the new block
             Block newBlock = new Block(prevHash, pendingEvents);

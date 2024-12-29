@@ -15,7 +15,7 @@
 //////////////////////////////////////////////////////////////////////////////
 package blockchain.utils;
 
-import cd.utils.SecurityUtils;
+import utils.SecurityUtils;
 import java.math.BigInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;

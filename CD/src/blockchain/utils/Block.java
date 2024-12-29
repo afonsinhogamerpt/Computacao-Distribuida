@@ -42,7 +42,17 @@ public class Block implements Serializable, Comparable<Block> {
     int nonce;           // proof of work 
     private String signature; // Assinatura da instituição pois cada bloco tem de ser adicionado por uma instituição valida.
     //List<String> transactions; // transações do bloco (devem ser guardadas em separado)
+    
+    public Block(List<String> key, String hash) {
+        
+        MerkleTree mkt = new MerkleTree(key);
+        this.merkleRoot = mkt.getRoot();
+        this.currentHash = calculateHash();
+        this.previousHash = hash;
+    }
 
+    
+    
     public Block(String previousHash, List<Event> events) {
         this.previousHash = previousHash;
         this.events = events;

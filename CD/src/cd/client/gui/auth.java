@@ -302,7 +302,7 @@ public class auth extends javax.swing.JFrame {
                             new coreGui(user).setVisible(true);
                             dispose();
                         } catch (Exception ex) {
-                            Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
+                            System.out.println("juro");
                         }
                     } else {
                         // Caso o login falhe

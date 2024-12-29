@@ -25,7 +25,7 @@ public class coreGui extends javax.swing.JFrame {
 
     User userLogged = null;
     public static String fileCurriculumVitae = "fileCurriculumVitae.obj"; // é suposto remover a seguir quando estiver no server
-    mainCore core;
+    mainCore core;   
     //blockchain.utils.BlockChain bc; // para remover!
     //private List<Event> pendingEvents = new ArrayList<>(); // apenas teste!
 
@@ -34,17 +34,23 @@ public class coreGui extends javax.swing.JFrame {
      */
     public coreGui() throws Exception {
         initComponents();
-
     }
 
     public coreGui(User u) throws IOException, Exception {
         initComponents();
-        core = new mainCore();
+        
+        try{
+            core.load(fileCurriculumVitae);
+        }catch(Exception e){
+            core = new mainCore();
+        }
         
         this.userLogged = u;
         username.setText(u.getNome().toUpperCase());
-        //DefaultListModel model = new Curriculum().getCurriculum(userLogged);
-        //curriculumList.setModel(model);
+        
+        DefaultListModel model = new Curriculum().getCurriculum(userLogged);
+        curriculumList.setModel(model);
+        
         if (userLogged.getUserType().equals("INSTITUICAO")) {
             InstituicaoLabel.setVisible(false);
             InstituicaoDropDown.setVisible(false);
@@ -287,6 +293,8 @@ public class coreGui extends javax.swing.JFrame {
                 userTo.loadPublic();
                 
                 core.addEvent(event.getText(), userLogged, userTo);
+                
+                
                 
                 //Curriculum cur = new Curriculum(name.getText()); // utilizador a que vai ser associado o evento.
                 //cur.addCurriculum((name.getText()+ " " + event.getText()), userLogged);
