@@ -98,6 +98,9 @@ public class mainCore implements Serializable {
             MerkleTree mkt = new MerkleTree(pendingEvents.stream()
                     .map(pendingEvent -> pendingEvent.event)
                     .toList());
+            
+            long timestamp = System.currentTimeMillis();
+            mkt.saveToFile(timestamp + ".mkt");
 
             String merkleRoot = mkt.getRoot();
             String prevHash = bc.getLastBlockHash();

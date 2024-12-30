@@ -4,14 +4,9 @@
  */
 package cd.client.gui;
 
-import blockchain.utils.Block;
-import blockchain.utils.BlockChain;
-import core.Event;
 import core.Curriculum;
 import core.mainCore;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;

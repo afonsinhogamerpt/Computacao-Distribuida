@@ -349,9 +349,9 @@ public class auth extends javax.swing.JFrame {
 
     private void usersSistemaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usersSistemaMouseClicked
         // TODO add your handling code here:
-        int selectedIndex = usersSistema.getSelectedIndex();
-        String selectedValue = (String) usersSistema.getModel().getElementAt(selectedIndex);
-        usernameLogin.setText(selectedValue);
+        int selectedIndex = usersSistema2.getSelectedIndex();
+        String selectedValue = (String) usersSistema2.getModel().getElementAt(selectedIndex);
+        usernameLogin2.setText(selectedValue);
     }//GEN-LAST:event_usersSistemaMouseClicked
 
     /**
@@ -360,7 +360,7 @@ public class auth extends javax.swing.JFrame {
      * @param evt
      */
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
-        String username = usernameLogin.getText();
+        String username = usernameLogin2.getText();
         String password = new String(passwordLogin.getPassword());
 
         // Criação de uma thread para não bloquear a interface.
@@ -405,7 +405,7 @@ public class auth extends javax.swing.JFrame {
 
     private void insertUsersInList() {
         DefaultListModel model = new User().getUsers();
-        usersSistema.setModel(model);
+        usersSistema2.setModel(model);
     }
 
     /**
