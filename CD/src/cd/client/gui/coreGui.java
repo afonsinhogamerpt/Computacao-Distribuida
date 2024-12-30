@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import shared.User;
 
 /**
@@ -25,7 +27,7 @@ public class coreGui extends javax.swing.JFrame {
 
     User userLogged = null;
     public static String fileCurriculumVitae = "fileCurriculumVitae.obj"; // é suposto remover a seguir quando estiver no server
-    mainCore core;   
+    mainCore core;
     //blockchain.utils.BlockChain bc; // para remover!
     //private List<Event> pendingEvents = new ArrayList<>(); // apenas teste!
 
@@ -38,21 +40,21 @@ public class coreGui extends javax.swing.JFrame {
 
     public coreGui(User u) throws IOException, Exception {
         initComponents();
-        
-        try{
+
+        try {
             core = mainCore.load(fileCurriculumVitae);
             System.out.println(core.toString());
-        }catch(Exception e){
+        } catch (Exception e) {
             core = new mainCore();
             System.out.println(core.toString());
         }
-        
+
         this.userLogged = u;
         username.setText(u.getNome().toUpperCase());
-        
+
         DefaultListModel model = new Curriculum().getCurriculum(userLogged);
         curriculumList.setModel(model);
-        
+
         if (userLogged.getUserType().equals("INSTITUICAO")) {
             InstituicaoLabel.setVisible(false);
             InstituicaoDropDown.setVisible(false);
@@ -315,39 +317,41 @@ public class coreGui extends javax.swing.JFrame {
     }//GEN-LAST:event_showActionPerformed
 
     private void addCurriculumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCurriculumActionPerformed
-        try {
-            // TODO add your handling code here:
-            if (userLogged.getUserType().equals("INSTITUICAO")) {
+        // Criação de uma thread para não bloquear a interface.
+        new Thread(() -> {
+            try {
+                if (userLogged.getUserType().equals("INSTITUICAO")) {
 
-                User userTo = new User(name.getText(), "NORMAL");
-                userTo.loadPublic();
+                    User userTo = new User(name.getText(), "NORMAL");
+                    userTo.loadPublic();
 
-                core.addEvent(event.getText(), userLogged, userTo);
-                core.save(fileCurriculumVitae);
+                    core.addEvent(event.getText(), userLogged, userTo);
+                    core.save(fileCurriculumVitae);
 
-                //Curriculum cur = new Curriculum(name.getText()); // utilizador a que vai ser associado o evento.
-                //cur.addCurriculum((name.getText()+ " " + event.getText()), userLogged);
-                //cur.addEvent(event.getText(), userLogged, bc, pendingEvents);
-
-                // Obter os eventos do usuário
-                //List<String> userEvents = cur.getUserEvents(userLogged, bc);
-                // Criar o DefaultListModel e adicionar os eventos
-                //                DefaultListModel<String> model = new DefaultListModel<>();
-                //                for (String event : userEvents) {
-                    //                    model.addElement(event);
-                    //                }
-                //       eventsList.setModel(model);
-
-                // Atualizar o componente de lista na interface gráfica
-                //DefaultListModel model = new Curriculum().getCurriculum(userLogged);
-                //curriculumList.setModel(model);
-                // User toUser = new User("","NORMAL");
-                // toUser.loadPublic();
+                    // Curriculum cur = new Curriculum(name.getText()); // utilizador a que vai ser associado o evento.
+                    // cur.addCurriculum((name.getText() + " " + event.getText()), userLogged);
+                    // cur.addEvent(event.getText(), userLogged, bc, pendingEvents);
+                    // Obter os eventos do usuário
+                    // List<String> userEvents = cur.getUserEvents(userLogged, bc);
+                    // Criar o DefaultListModel e adicionar os eventos
+                    // DefaultListModel<String> model = new DefaultListModel<>();
+                    // for (String event : userEvents) {
+                    //     model.addElement(event);
+                    // }
+                    // eventsList.setModel(model);
+                    // Atualizar o componente de lista na interface gráfica
+                    // DefaultListModel model = new Curriculum().getCurriculum(userLogged);
+                    // curriculumList.setModel(model);
+                    // User toUser = new User("", "NORMAL");
+                    // toUser.loadPublic();
+                }
+            } catch (Exception ex) {
+                SwingUtilities.invokeLater(() -> {
+                    JOptionPane.showMessageDialog(null, "O utilizador " + name.getText() + " não está registado.");
+                    Logger.getLogger(coreGui.class.getName()).log(Level.SEVERE, null, ex);
+                });
             }
-
-        } catch (Exception ex) {
-            Logger.getLogger(coreGui.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }).start();
     }//GEN-LAST:event_addCurriculumActionPerformed
 
     /**
