@@ -330,7 +330,7 @@ public class auth extends javax.swing.JFrame {
                     if (registrationSuccess) {
                         JOptionPane.showMessageDialog(auth.this, "Registo do utilizador " + username + " bem-sucedido!");
                         // Muda para a tela de login com sucesso.
-                        jTabbedPane1.setSelectedIndex(0);
+                        jTabbedPane3.setSelectedIndex(0);
                     } else {
                         JOptionPane.showMessageDialog(auth.this, "Falha no registo do utilizador " + username);
                     }
