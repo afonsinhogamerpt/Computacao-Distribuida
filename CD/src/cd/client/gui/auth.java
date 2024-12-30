@@ -70,6 +70,7 @@ public class auth extends javax.swing.JFrame {
 
         jLabel1.setText("Username");
 
+        usernameLogin.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         usernameLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 usernameLoginActionPerformed(evt);
@@ -116,6 +117,8 @@ public class auth extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        passwordLogin.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -156,6 +159,8 @@ public class auth extends javax.swing.JFrame {
 
         jLabel4.setText("Username");
 
+        usernameRegisto.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+
         jLabel5.setText("Password");
 
         tipoRegisto.setText("É uma instituição?");
@@ -177,6 +182,8 @@ public class auth extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 259, Short.MAX_VALUE)
         );
+
+        passwordRegisto.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);

@@ -56,6 +56,9 @@ public class coreGui extends javax.swing.JFrame {
         if (userLogged.getUserType().equals("INSTITUICAO")) {
             InstituicaoLabel.setVisible(false);
             InstituicaoDropDown.setVisible(false);
+            show.setVisible(false);
+            jTabbedPane1.removeTabAt(1);
+            name.requestFocusInWindow();
         } else {
             toLabel.setVisible(false);
             name.setVisible(false);
@@ -102,15 +105,20 @@ public class coreGui extends javax.swing.JFrame {
 
         jLabel10.setText("BEM VINDO (a) DE VOLTA: ");
 
+        username.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
+
         jLabel1.setText("Evento");
 
         toLabel.setText("Nome");
 
+        event.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         event.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 eventActionPerformed(evt);
             }
         });
+
+        name.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 
         addCurriculum.setText("Adicionar");
         addCurriculum.addActionListener(new java.awt.event.ActionListener() {
@@ -126,6 +134,7 @@ public class coreGui extends javax.swing.JFrame {
             }
         });
 
+        InstituicaoDropDown.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         InstituicaoDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         InstituicaoLabel.setText("Instituição");
@@ -218,9 +227,6 @@ public class coreGui extends javax.swing.JFrame {
 
         jScrollPane2.setViewportView(mktList);
 
-        InstituicaoVerif.setIcon(new javax.swing.ImageIcon("C:\\Users\\António\\Documents\\WORK\\DISTRIBUIDA\\CD\\src\\cd\\client\\gui\\multimedia\\verifica (1).png")); // NOI18N
-
-        jLabel3.setIcon(new javax.swing.ImageIcon("C:\\Users\\António\\Documents\\WORK\\DISTRIBUIDA\\CD\\src\\cd\\client\\gui\\multimedia\\fechar.png")); // NOI18N
         jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel3MouseClicked(evt);
@@ -286,44 +292,11 @@ public class coreGui extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_eventActionPerformed
 
-    private void addCurriculumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCurriculumActionPerformed
-        try {
-            // TODO add your handling code here:
-            if (userLogged.getUserType().equals("INSTITUICAO")) {
-                
-                User userTo = new User(name.getText(), "NORMAL");
-                userTo.loadPublic();
-                
-                core.addEvent(event.getText(), userLogged, userTo);
-                core.save(fileCurriculumVitae);
-                
-                
-                
-                //Curriculum cur = new Curriculum(name.getText()); // utilizador a que vai ser associado o evento.
-                //cur.addCurriculum((name.getText()+ " " + event.getText()), userLogged);
-                //cur.addEvent(event.getText(), userLogged, bc, pendingEvents);
-
-                // Obter os eventos do usuário
-                //List<String> userEvents = cur.getUserEvents(userLogged, bc);
-                // Criar o DefaultListModel e adicionar os eventos
-//                DefaultListModel<String> model = new DefaultListModel<>();
-//                for (String event : userEvents) {
-//                    model.addElement(event);
-//                }
-//       eventsList.setModel(model);
-
-                // Atualizar o componente de lista na interface gráfica
-                //DefaultListModel model = new Curriculum().getCurriculum(userLogged);
-                //curriculumList.setModel(model);
-                // User toUser = new User("","NORMAL");
-                // toUser.loadPublic();
-            }
-
-        } catch (Exception ex) {
-            Logger.getLogger(coreGui.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }//GEN-LAST:event_addCurriculumActionPerformed
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+        // TODO add your handling code here:
+        new auth().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jLabel3MouseClicked
 
     private void showActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showActionPerformed
         // TODO add your handling code here:
@@ -338,11 +311,41 @@ public class coreGui extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_showActionPerformed
 
-    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
-        // TODO add your handling code here:
-        new auth().setVisible(true);
-        dispose();
-    }//GEN-LAST:event_jLabel3MouseClicked
+    private void addCurriculumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCurriculumActionPerformed
+        try {
+            // TODO add your handling code here:
+            if (userLogged.getUserType().equals("INSTITUICAO")) {
+
+                User userTo = new User(name.getText(), "NORMAL");
+                userTo.loadPublic();
+
+                core.addEvent(event.getText(), userLogged, userTo);
+                core.save(fileCurriculumVitae);
+
+                //Curriculum cur = new Curriculum(name.getText()); // utilizador a que vai ser associado o evento.
+                //cur.addCurriculum((name.getText()+ " " + event.getText()), userLogged);
+                //cur.addEvent(event.getText(), userLogged, bc, pendingEvents);
+
+                // Obter os eventos do usuário
+                //List<String> userEvents = cur.getUserEvents(userLogged, bc);
+                // Criar o DefaultListModel e adicionar os eventos
+                //                DefaultListModel<String> model = new DefaultListModel<>();
+                //                for (String event : userEvents) {
+                    //                    model.addElement(event);
+                    //                }
+                //       eventsList.setModel(model);
+
+                // Atualizar o componente de lista na interface gráfica
+                //DefaultListModel model = new Curriculum().getCurriculum(userLogged);
+                //curriculumList.setModel(model);
+                // User toUser = new User("","NORMAL");
+                // toUser.loadPublic();
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(coreGui.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_addCurriculumActionPerformed
 
     /**
      * @param args the command line arguments
