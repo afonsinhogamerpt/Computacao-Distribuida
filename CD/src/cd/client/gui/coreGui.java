@@ -186,6 +186,7 @@ public class coreGui extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Adicionar Curriculo", jPanel2);
 
+        eventsList.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         eventsList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
@@ -223,8 +224,10 @@ public class coreGui extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
+        curriculumList.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jScrollPane1.setViewportView(curriculumList);
 
+        mktList.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jScrollPane2.setViewportView(mktList);
 
         jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
