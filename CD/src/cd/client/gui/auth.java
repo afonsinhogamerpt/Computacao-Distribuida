@@ -180,7 +180,7 @@ public class auth extends javax.swing.JFrame {
             }
         });
 
-        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/maintenance-ezgif.com-resize.gif"))); // NOI18N
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/output-onlinegiftools.gif"))); // NOI18N
         jLabel11.setText("jLabel11");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -444,51 +444,31 @@ public class auth extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton LoginButton;
-    private javax.swing.JButton LoginButton1;
     private javax.swing.JButton LoginButton2;
     private javax.swing.JButton RegistoButton;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTabbedPane jTabbedPane3;
     private javax.swing.JPasswordField passwordLogin;
     private javax.swing.JPasswordField passwordRegisto;
     private javax.swing.JCheckBox tipoRegisto;
-    private javax.swing.JTextField usernameLogin;
-    private javax.swing.JTextField usernameLogin1;
     private javax.swing.JTextField usernameLogin2;
     private javax.swing.JTextField usernameRegisto;
-    private javax.swing.JList<String> usersSistema;
-    private javax.swing.JList<String> usersSistema1;
     private javax.swing.JList<String> usersSistema2;
     // End of variables declaration//GEN-END:variables
 }
