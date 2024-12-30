@@ -232,6 +232,9 @@ public class coreGui extends javax.swing.JFrame {
         mktList.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jScrollPane2.setViewportView(mktList);
 
+        InstituicaoVerif.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/verifica (1).png"))); // NOI18N
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/fechar.png"))); // NOI18N
         jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel3MouseClicked(evt);
@@ -351,7 +354,7 @@ public class coreGui extends javax.swing.JFrame {
                     Logger.getLogger(coreGui.class.getName()).log(Level.SEVERE, null, ex);
                 });
             }
-        }).start();
+        }).start(); // Iniciar a thread
     }//GEN-LAST:event_addCurriculumActionPerformed
 
     /**
