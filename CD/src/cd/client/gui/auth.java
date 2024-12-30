@@ -68,9 +68,11 @@ public class auth extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jTabbedPane1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
         jLabel1.setText("Username");
 
-        usernameLogin.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        usernameLogin.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         usernameLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 usernameLoginActionPerformed(evt);
@@ -79,6 +81,8 @@ public class auth extends javax.swing.JFrame {
 
         jLabel2.setText("Password");
 
+        LoginButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        LoginButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/fechadura-com-chave.png"))); // NOI18N
         LoginButton.setText("Login");
         LoginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -86,6 +90,7 @@ public class auth extends javax.swing.JFrame {
             }
         });
 
+        usersSistema.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
         usersSistema.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
@@ -113,11 +118,11 @@ public class auth extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel3)
                 .addGap(8, 8, 8)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        passwordLogin.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        passwordLogin.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -155,16 +160,18 @@ public class auth extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("LOGIN", jPanel1);
+        jTabbedPane1.addTab("LOGIN", new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/fechadura-com-chave.png")), jPanel1); // NOI18N
 
         jLabel4.setText("Username");
 
-        usernameRegisto.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        usernameRegisto.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
         jLabel5.setText("Password");
 
         tipoRegisto.setText("É uma instituição?");
 
+        RegistoButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        RegistoButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/adicionar-usuario.png"))); // NOI18N
         RegistoButton.setText("Registo");
         RegistoButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -180,10 +187,10 @@ public class auth extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 259, Short.MAX_VALUE)
+            .addGap(0, 257, Short.MAX_VALUE)
         );
 
-        passwordRegisto.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        passwordRegisto.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -217,13 +224,13 @@ public class auth extends javax.swing.JFrame {
                 .addComponent(tipoRegisto)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(RegistoButton)
-                .addContainerGap(55, Short.MAX_VALUE))
+                .addContainerGap(43, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("REGISTO", jPanel2);
+        jTabbedPane1.addTab("REGISTO", new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/adicionar-usuario.png")), jPanel2); // NOI18N
 
         jLabel8.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         jLabel8.setText("Alunos do grupo");
@@ -263,10 +270,10 @@ public class auth extends javax.swing.JFrame {
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel10)
-                .addContainerGap(85, Short.MAX_VALUE))
+                .addContainerGap(83, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Acerca", jPanel5);
+        jTabbedPane1.addTab("Acerca", new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/em-formacao.png")), jPanel5); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
