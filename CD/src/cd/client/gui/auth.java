@@ -40,16 +40,16 @@ public class auth extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        usernameLogin = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        LoginButton = new javax.swing.JButton();
-        jPanel4 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        usersSistema = new javax.swing.JList<>();
-        jLabel3 = new javax.swing.JLabel();
+        jTabbedPane3 = new javax.swing.JTabbedPane();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel15 = new javax.swing.JLabel();
+        usernameLogin2 = new javax.swing.JTextField();
+        jLabel16 = new javax.swing.JLabel();
+        LoginButton2 = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        usersSistema2 = new javax.swing.JList<>();
+        jLabel17 = new javax.swing.JLabel();
         passwordLogin = new javax.swing.JPasswordField();
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -58,6 +58,7 @@ public class auth extends javax.swing.JFrame {
         tipoRegisto = new javax.swing.JCheckBox();
         RegistoButton = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
         passwordRegisto = new javax.swing.JPasswordField();
         jPanel5 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
@@ -68,99 +69,99 @@ public class auth extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTabbedPane1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTabbedPane3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        jLabel1.setText("Username");
+        jLabel15.setText("Username");
 
-        usernameLogin.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        usernameLogin.addActionListener(new java.awt.event.ActionListener() {
+        usernameLogin2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        usernameLogin2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 usernameLoginActionPerformed(evt);
             }
         });
 
-        jLabel2.setText("Password");
+        jLabel16.setText("Password");
 
-        LoginButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        LoginButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/fechadura-com-chave.png"))); // NOI18N
-        LoginButton.setText("Login");
-        LoginButton.addActionListener(new java.awt.event.ActionListener() {
+        LoginButton2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        LoginButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/fechadura-com-chave.png"))); // NOI18N
+        LoginButton2.setText("Login");
+        LoginButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 LoginButtonActionPerformed(evt);
             }
         });
 
-        usersSistema.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
-        usersSistema.setModel(new javax.swing.AbstractListModel<String>() {
+        usersSistema2.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
+        usersSistema2.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        usersSistema.addMouseListener(new java.awt.event.MouseAdapter() {
+        usersSistema2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 usersSistemaMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(usersSistema);
+        jScrollPane3.setViewportView(usersSistema2);
 
-        jLabel3.setText("Contas presentes no sistema:");
+        jLabel17.setText("Contas presentes no sistema:");
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
-            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane3)
+            .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel3)
+                .addComponent(jLabel17)
                 .addGap(8, 8, 8)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         passwordLogin.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(LoginButton)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(usernameLogin)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(LoginButton2)
+                    .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(usernameLogin2)
                     .addComponent(passwordLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel9Layout.createSequentialGroup()
                 .addGap(36, 36, 36)
-                .addComponent(jLabel1)
+                .addComponent(jLabel15)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(usernameLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(usernameLogin2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2)
+                .addComponent(jLabel16)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(passwordLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(LoginButton)
+                .addComponent(LoginButton2)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("LOGIN", new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/fechadura-com-chave.png")), jPanel1); // NOI18N
+        jTabbedPane3.addTab("LOGIN", new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/fechadura-com-chave.png")), jPanel9); // NOI18N
 
         jLabel4.setText("Username");
 
@@ -179,15 +180,24 @@ public class auth extends javax.swing.JFrame {
             }
         });
 
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/maintenance-ezgif.com-resize.gif"))); // NOI18N
+        jLabel11.setText("jLabel11");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 221, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(76, 76, 76)
+                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(72, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 257, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(79, 79, 79)
+                .addComponent(jLabel11)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         passwordRegisto.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -224,13 +234,13 @@ public class auth extends javax.swing.JFrame {
                 .addComponent(tipoRegisto)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(RegistoButton)
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("REGISTO", new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/adicionar-usuario.png")), jPanel2); // NOI18N
+        jTabbedPane3.addTab("REGISTO", new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/adicionar-usuario.png")), jPanel2); // NOI18N
 
         jLabel8.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         jLabel8.setText("Alunos do grupo");
@@ -255,7 +265,7 @@ public class auth extends javax.swing.JFrame {
                     .addComponent(jLabel6)
                     .addComponent(jLabel7)
                     .addComponent(jLabel9))
-                .addContainerGap(197, Short.MAX_VALUE))
+                .addContainerGap(189, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -270,73 +280,24 @@ public class auth extends javax.swing.JFrame {
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel10)
-                .addContainerGap(83, Short.MAX_VALUE))
+                .addContainerGap(90, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Acerca", new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/em-formacao.png")), jPanel5); // NOI18N
+        jTabbedPane3.addTab("Acerca", new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/em-formacao.png")), jPanel5); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane3)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane3)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void usernameLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameLoginActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_usernameLoginActionPerformed
-
-    /**
-     * Responsavel por aceder ao servidor e realizar o login do utilizador.
-     *
-     * @param evt
-     */
-    private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
-        String username = usernameLogin.getText();
-        String password = new String(passwordLogin.getPassword());
-
-        // Criação de uma thread para não bloquear a interface.
-        new Thread(() -> {
-            try {
-                AuthenticationService authService = (AuthenticationService) Naming.lookup("//localhost:1099/AuthenticationService");
-
-                User user = authService.login(username, password);
-
-                // Atualizar para coreGui e mostrar mensagem de dialog caso falhe o login.
-                SwingUtilities.invokeLater(() -> {
-                    if (user != null) {
-                        try {
-                            new coreGui(user).setVisible(true);
-                            dispose();
-                        } catch (Exception ex) {
-                            System.out.println("juro");
-                        }
-                    } else {
-                        // Caso o login falhe
-                        JOptionPane.showMessageDialog(auth.this, "Nome de utilizador ou Palavra-passe Inválidos.");
-                    }
-                });
-
-            } catch (IOException ex) { // Captura todas as exceções derivadas de IOException
-                SwingUtilities.invokeLater(() -> {
-                    JOptionPane.showMessageDialog(auth.this, "Erro de IO: " + ex.getMessage());
-                });
-                Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NotBoundException ex) { // Mantemos o NotBoundException porque ele não é derivado de IOException
-                SwingUtilities.invokeLater(() -> {
-                    JOptionPane.showMessageDialog(auth.this, "Erro: " + ex.getMessage());
-                });
-                Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }).start(); // Iniciar a thread
-    }//GEN-LAST:event_LoginButtonActionPerformed
 
     /**
      * *
@@ -393,6 +354,55 @@ public class auth extends javax.swing.JFrame {
         usernameLogin.setText(selectedValue);
     }//GEN-LAST:event_usersSistemaMouseClicked
 
+    /**
+     * Responsavel por aceder ao servidor e realizar o login do utilizador.
+     *
+     * @param evt
+     */
+    private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
+        String username = usernameLogin.getText();
+        String password = new String(passwordLogin.getPassword());
+
+        // Criação de uma thread para não bloquear a interface.
+        new Thread(() -> {
+            try {
+                AuthenticationService authService = (AuthenticationService) Naming.lookup("//localhost:1099/AuthenticationService");
+
+                User user = authService.login(username, password);
+
+                // Atualizar para coreGui e mostrar mensagem de dialog caso falhe o login.
+                SwingUtilities.invokeLater(() -> {
+                    if (user != null) {
+                        try {
+                            new coreGui(user).setVisible(true);
+                            dispose();
+                        } catch (Exception ex) {
+                            System.out.println("juro");
+                        }
+                    } else {
+                        // Caso o login falhe
+                        JOptionPane.showMessageDialog(auth.this, "Nome de utilizador ou Palavra-passe Inválidos.");
+                    }
+                });
+
+            } catch (IOException ex) { // Captura todas as exceções derivadas de IOException
+                SwingUtilities.invokeLater(() -> {
+                    JOptionPane.showMessageDialog(auth.this, "Erro de IO: " + ex.getMessage());
+                });
+                Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NotBoundException ex) { // Mantemos o NotBoundException porque ele não é derivado de IOException
+                SwingUtilities.invokeLater(() -> {
+                    JOptionPane.showMessageDialog(auth.this, "Erro: " + ex.getMessage());
+                });
+                Logger.getLogger(auth.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }).start(); // Iniciar a thread
+    }//GEN-LAST:event_LoginButtonActionPerformed
+
+    private void usernameLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameLoginActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_usernameLoginActionPerformed
+
     private void insertUsersInList() {
         DefaultListModel model = new User().getUsers();
         usersSistema.setModel(model);
@@ -435,9 +445,18 @@ public class auth extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton LoginButton;
+    private javax.swing.JButton LoginButton1;
+    private javax.swing.JButton LoginButton2;
     private javax.swing.JButton RegistoButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -451,13 +470,25 @@ public class auth extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabbedPane2;
+    private javax.swing.JTabbedPane jTabbedPane3;
     private javax.swing.JPasswordField passwordLogin;
     private javax.swing.JPasswordField passwordRegisto;
     private javax.swing.JCheckBox tipoRegisto;
     private javax.swing.JTextField usernameLogin;
+    private javax.swing.JTextField usernameLogin1;
+    private javax.swing.JTextField usernameLogin2;
     private javax.swing.JTextField usernameRegisto;
     private javax.swing.JList<String> usersSistema;
+    private javax.swing.JList<String> usersSistema1;
+    private javax.swing.JList<String> usersSistema2;
     // End of variables declaration//GEN-END:variables
 }
