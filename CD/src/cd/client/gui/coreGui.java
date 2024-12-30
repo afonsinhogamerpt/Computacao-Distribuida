@@ -28,14 +28,16 @@ public class coreGui extends javax.swing.JFrame {
     User userLogged = null;
     public static String fileCurriculumVitae = "fileCurriculumVitae.obj"; // é suposto remover a seguir quando estiver no server
     mainCore core;
-    //blockchain.utils.BlockChain bc; // para remover!
-    //private List<Event> pendingEvents = new ArrayList<>(); // apenas teste!
 
     /**
      * Creates new form coreGui
      */
     public coreGui() throws Exception {
-        initComponents();
+        //assim força a realizar o login.
+        new auth().setVisible(true);
+        dispose();
+        //initComponents();
+
     }
 
     public coreGui(User u) throws IOException, Exception {
