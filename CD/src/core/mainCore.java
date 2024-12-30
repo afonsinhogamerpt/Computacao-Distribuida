@@ -27,8 +27,8 @@ public class mainCore implements Serializable {
 
     blockchain.utils.BlockChain bc;
     private List<Event> pendingEvents;
-    public static int DIFICULTY = 5; // pode ser ajustada consoante o tempo que os mineiros vao demorando na rede.
-     public static String fileCurriculumVitae = "fileCurriculumVitae.obj"; 
+    public transient static int DIFICULTY = 5; // pode ser ajustada consoante o tempo que os mineiros vao demorando na rede.
+    public transient static String fileCurriculumVitae = "fileCurriculumVitae.obj"; 
      
     public mainCore() throws Exception {
         try{
@@ -40,22 +40,20 @@ public class mainCore implements Serializable {
             str.add(ola + "");
             Block block = new Block(str, "0");
             block.setNonce(0);
-            System.out.println(block.calculateHash());
-            System.out.println(block.getHeaderString());
+            //System.out.println(block.calculateHash());
+            //System.out.println(block.getHeaderString());
             bc = new BlockChain();
-            bc.save(fileCurriculumVitae);
             bc.add(block);
+            save(fileCurriculumVitae);
         }catch (Exception e){
             System.out.println("erro");
         }
         
     }
     
-    /*public mainCore(User u) throws Exception{
+    public mainCore(User u) throws Exception{
         
-    }*/
-    
-    
+    }
     
  
 
@@ -66,12 +64,23 @@ public class mainCore implements Serializable {
         }
     }
 
-    public mainCore load(String fileName) throws IOException, ClassNotFoundException {
+    /*public static mainCore load(String fileName) throws IOException, ClassNotFoundException {
         try (ObjectInputStream in = new ObjectInputStream(
                 new FileInputStream(fileName))) {
             return (mainCore) in.readObject(); // isto só funciona porque é serializable.
         }
+    }*/
+    public static mainCore load(String fileName) throws IOException, ClassNotFoundException {
+    try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName))) {
+        Object obj = in.readObject();
+        if (obj instanceof mainCore core) {
+            return core;
+        } else {
+            throw new ClassCastException("O objeto no arquivo não é do tipo mainCore.");
+        }
     }
+}
+    
 
     public void addEvent(String event, User userFrom, User userTo) throws Exception {
         // Create and encrypt a new event
@@ -114,5 +123,12 @@ public class mainCore implements Serializable {
             System.out.println("Block added to blockchain successfully.");
         }
     }
+
+    @Override
+    public String toString() {
+        return "mainCore{" + "bc=" + bc.toString() + ", pendingEvents=" + pendingEvents + '}';
+    }
+    
+    
 
 }

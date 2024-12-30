@@ -331,18 +331,8 @@
       </SubComponents>
     </Container>
     <Component class="javax.swing.JLabel" name="InstituicaoVerif">
-      <Properties>
-        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\Ant&#xf3;nio\Documents\WORK\DISTRIBUIDA\CD\src\cd\client\gui\multimedia\verifica (1).png"/>
-        </Property>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
-      <Properties>
-        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\Ant&#xf3;nio\Documents\WORK\DISTRIBUIDA\CD\src\cd\client\gui\multimedia\fechar.png"/>
-        </Property>
-      </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabel3MouseClicked"/>
       </Events>

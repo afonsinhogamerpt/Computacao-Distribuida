@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
+import java.security.Timestamp;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
@@ -43,8 +44,10 @@ public class Block implements Serializable, Comparable<Block> {
     private String signature; // Assinatura da instituição pois cada bloco tem de ser adicionado por uma instituição valida.
     //List<String> transactions; // transações do bloco (devem ser guardadas em separado)
     
+    //int ID;
+    //Timestamp time;
+    
     public Block(List<String> key, String hash) {
-        
         MerkleTree mkt = new MerkleTree(key);
         this.merkleRoot = mkt.getRoot();
         this.currentHash = calculateHash();

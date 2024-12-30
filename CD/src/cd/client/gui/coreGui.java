@@ -40,9 +40,11 @@ public class coreGui extends javax.swing.JFrame {
         initComponents();
         
         try{
-            core = core.load(fileCurriculumVitae);
+            core = mainCore.load(fileCurriculumVitae);
+            System.out.println(core.toString());
         }catch(Exception e){
             core = new mainCore();
+            System.out.println(core.toString());
         }
         
         this.userLogged = u;
@@ -293,6 +295,7 @@ public class coreGui extends javax.swing.JFrame {
                 userTo.loadPublic();
                 
                 core.addEvent(event.getText(), userLogged, userTo);
+                core.save(fileCurriculumVitae);
                 
                 
                 

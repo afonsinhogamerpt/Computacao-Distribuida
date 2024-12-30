@@ -78,22 +78,25 @@ public class BlockChain implements Serializable {
 
     public void add(Block newBlock) throws Exception {
         
-        System.out.println("Last Block Hash: " + getLastBlockHash());
-System.out.println("New Block Previous Hash: " + newBlock.getPreviousHash());
-System.out.println("Merkle Root: " + newBlock.getMerkleRoot());
-System.out.println("New Block Hash: " + newBlock.getCurrentHash());
+        //System.out.println("Last Block Hash: " + getLastBlockHash());
+        //System.out.println("New Block Previous Hash: " + newBlock.getPreviousHash());
+        //System.out.println("Merkle Root: " + newBlock.getMerkleRoot());
+        //System.out.println("New Block Hash: " + newBlock.getCurrentHash());
+        
         if (chain.contains(newBlock)) {
             throw new Exception("Duplicated Block");
         }
         
-        System.out.println("teste");
+        //System.out.println("teste");
 
         //verify block
         if (!newBlock.isValid()) {
             throw new Exception("Invalid Block");
         }
-        System.out.println("teste2");
+        //System.out.println("teste2");
         //verify link
+        
+        //cuidado com esta function, mudei um bocado a logica
         if(!chain.isEmpty()){
             if (getLastBlockHash().compareTo(newBlock.previousHash) != 0) {
                 throw new Exception("Previous hash not combine");
@@ -102,7 +105,7 @@ System.out.println("New Block Hash: " + newBlock.getCurrentHash());
             chain.add(newBlock);
         }
         chain.add(newBlock);
-        System.out.println("Bloco adicionado");
+        //System.out.println("Bloco adicionado");
     }
 
     public Block get(int index) {
