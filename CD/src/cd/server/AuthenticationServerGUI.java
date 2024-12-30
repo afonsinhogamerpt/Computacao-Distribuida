@@ -4,11 +4,26 @@
  */
 package cd.server;
 
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.StyledDocument;
+
 /**
  *
  * @author António
  */
 public class AuthenticationServerGUI extends javax.swing.JFrame {
+
+    // Cria uma instância da implementação do serviço
+    AuthenticationServiceImpl authServiceImpl;
 
     /**
      * Creates new form AuthenticationServerGUI
@@ -73,6 +88,11 @@ public class AuthenticationServerGUI extends javax.swing.JFrame {
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/antena-parabolica.png"))); // NOI18N
         jButton1.setText("Start");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         txtAddress.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txtAddress.setText("localhost");
@@ -473,6 +493,30 @@ public class AuthenticationServerGUI extends javax.swing.JFrame {
 
     }//GEN-LAST:event_lstBlcockchainValueChanged
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+
+        new Thread(() -> { // Cria uma nova thread para evitar bloquear a interface
+            try {
+                // Inicia o RMI Registry na porta padrão (1099)
+                Registry registry = LocateRegistry.createRegistry(1099);
+                AuthenticationServiceImpl authServiceImpl = new AuthenticationServiceImpl();
+                // Registra o serviço no RMI Registry com o nome "AuthenticationService"
+                Naming.rebind("//localhost/AuthenticationService", authServiceImpl);
+
+                // Atualiza o JTextArea no Event Dispatch Thread
+                SwingUtilities.invokeLater(() -> {
+                    appendToPane(txtServerLog, "Servidor RMI iniciado...\n");
+                });
+            } catch (Exception e) {
+                SwingUtilities.invokeLater(() -> {
+                    appendToPane(txtServerLog, "Erro ao iniciar o servidor: " + e.getMessage() + "\n");
+
+                });
+            }
+        }).start();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -552,4 +596,21 @@ public class AuthenticationServerGUI extends javax.swing.JFrame {
     private javax.swing.JLabel txtTimeLog1;
     private javax.swing.JLabel txtTimeLog2;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * *
+     * Este metodo serve exatamente para adicionar texto nos logs.
+     *
+     * @param textPane
+     * @param message
+     */
+    private void appendToPane(JTextPane textPane, String message) {
+        StyledDocument doc = textPane.getStyledDocument();
+        try {
+            doc.insertString(doc.getLength(), message, null);
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
