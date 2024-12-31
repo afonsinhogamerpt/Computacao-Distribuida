@@ -37,6 +37,7 @@ public class mainCore implements Serializable {
             String password = "jorge";
             User u = new User("jorge", "INSTITUICAO");
             pendingEvents = new ArrayList<>();
+            bc = new BlockChain();
             List<String> str = new ArrayList<>();
             u.load(password);
             PublicKey ola = u.getPub();
