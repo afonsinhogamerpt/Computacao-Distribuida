@@ -131,7 +131,7 @@ public class Curriculum {
                 content = utils.SecurityUtils.decrypt(content, user.getPriv());
                 model.addElement(file.getName());
             } catch (Exception e) {
-                //System.out.println("Ficheiro nao faz parte a este user: " + file);
+                //System.out.println("Ficheiro nao pertence ao user: " + file);
             }
 
         }

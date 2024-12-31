@@ -21,6 +21,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.Timestamp;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
@@ -47,18 +48,23 @@ public class Block implements Serializable, Comparable<Block> {
     //int ID;
     //Timestamp time;
     
-    public Block(List<String> key, String hash) {
+    public Block(List<String> key, String hash, List<Event> events) {
         MerkleTree mkt = new MerkleTree(key);
         this.merkleRoot = mkt.getRoot();
         this.currentHash = calculateHash();
         this.previousHash = hash;
+        this.events = events;
+    }
+
+    public void setMerkleRoot(String merkleRoot) {
+        this.merkleRoot = merkleRoot;
     }
 
     
     
     public Block(String previousHash, List<Event> events) {
         this.previousHash = previousHash;
-        this.events = events;
+        this.events = new ArrayList<>(events);
         //MerkleTree mkt = new MerkleTree(transactions);
         MerkleTree mkt = new MerkleTree(events.stream()
                 .map(event -> event.event)
@@ -79,7 +85,7 @@ public class Block implements Serializable, Comparable<Block> {
         rsa.update(dataToSign.getBytes());
         this.signature = Base64.getEncoder().encodeToString(rsa.sign());
     }
-
+    
     public boolean verifySignature(PublicKey publicKey) throws Exception {
         String dataToVerify = previousHash + merkleRoot;
         Signature rsa = Signature.getInstance("SHA256withRSA");
@@ -88,9 +94,25 @@ public class Block implements Serializable, Comparable<Block> {
         return rsa.verify(Base64.getDecoder().decode(signature));
     }
 
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
+    
+    
+
     public List<Event> getEvents() {
         return events;
     }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
+    
+    
 
     /////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////
@@ -137,15 +159,24 @@ public class Block implements Serializable, Comparable<Block> {
         return // (isValid() ? "OK\t" : "ERROR\t")+
                 String.format("[ %8s", previousHash) + " <- "
                 + String.format("%-10s", merkleRoot) + String.format(" %7d ] = ", nonce)
-                + String.format("%8s", currentHash);
-
+                + String.format("%8s", currentHash)
+                + "Signature: " + signature;
     }
+    
+    public String events(){
+        List<String> str = new ArrayList<String>();
+        for(Event evt : events){
+            str.add(evt + "");
+        }
+        return "" + str;
+    }
+   
 
     public String getHeaderString() {
         return "prev Hash: " + previousHash
-                + "\nMkt Root : " + merkleRoot
-                + "\nnonce    : " + nonce
-                + "\ncurr Hash: " + currentHash;
+                + "\tMkt Root : " + merkleRoot
+                + "\tnonce    : " + nonce
+                + "\tcurr Hash: " + currentHash;
                
     }
 

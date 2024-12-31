@@ -63,7 +63,7 @@ public class Event implements Serializable {
 
     @Override
     public String toString() {
-        return "Evento adicionado com sucesso a lista é : {" + "event=" + event + "ao utilizador" + userTo + '}';
+        return ""+event;
     }
 
 }

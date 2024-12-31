@@ -7,6 +7,7 @@ package cd.client.gui;
 import core.Curriculum;
 import core.mainCore;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -39,23 +40,29 @@ public class coreGui extends javax.swing.JFrame {
         initComponents();
 
         try {
+            System.out.println("ola");
             core = mainCore.load(fileCurriculumVitae);
             System.out.println(core.toString());
         } catch (Exception e) {
-            core = new mainCore();
+            System.out.println("ola2");
+            core = new mainCore();   
             System.out.println(core.toString());
         }
 
         this.userLogged = u;
         username.setText(u.getNome().toUpperCase());
 
-        DefaultListModel model = new Curriculum().getCurriculum(userLogged);
-        curriculumList.setModel(model);
+        //DefaultListModel model = core.getEventsBlockchain(userLogged.getPub());
+        //curriculumList.setModel(model);
+        
+        DefaultListModel ch = new DefaultListModel();
+        String[] oi = core.toString().split("\n");
+        bcElements.setListData(oi);
 
         if (userLogged.getUserType().equals("INSTITUICAO")) {
             InstituicaoLabel.setVisible(false);
             InstituicaoDropDown.setVisible(false);
-            show.setVisible(false);
+            //show.setVisible(false);
             jTabbedPane1.removeTabAt(1);
             name.requestFocusInWindow();
         } else {
@@ -96,7 +103,7 @@ public class coreGui extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         curriculumList = new javax.swing.JList<>();
         jScrollPane2 = new javax.swing.JScrollPane();
-        mktList = new javax.swing.JList<>();
+        bcElements = new javax.swing.JList<>();
         InstituicaoVerif = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
 
@@ -226,8 +233,8 @@ public class coreGui extends javax.swing.JFrame {
         curriculumList.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jScrollPane1.setViewportView(curriculumList);
 
-        mktList.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jScrollPane2.setViewportView(mktList);
+        bcElements.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jScrollPane2.setViewportView(bcElements);
 
         InstituicaoVerif.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/verifica (1).png"))); // NOI18N
 
@@ -307,10 +314,11 @@ public class coreGui extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         try {
-            Curriculum cur = new Curriculum();
+            //Curriculum cur = new Curriculum();
             //cur.getCurriculumList(userLogged);
-            System.out.println(cur.toString());
-
+            //System.out.println(cur.toString());
+            DefaultListModel model = core.getEventsBlockchain(userLogged.getPub());
+            curriculumList.setModel(model);
         } catch (Exception ex) {
             Logger.getLogger(coreGui.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -327,7 +335,11 @@ public class coreGui extends javax.swing.JFrame {
 
                     core.addEvent(event.getText(), userLogged, userTo);
                     core.save(fileCurriculumVitae);
-
+                    
+                    DefaultListModel ch = new DefaultListModel();
+                    String[] oi = core.toString().split("\n");
+                    bcElements.setListData(oi);
+                    
                     // Curriculum cur = new Curriculum(name.getText()); // utilizador a que vai ser associado o evento.
                     // cur.addCurriculum((name.getText() + " " + event.getText()), userLogged);
                     // cur.addEvent(event.getText(), userLogged, bc, pendingEvents);
@@ -398,6 +410,7 @@ public class coreGui extends javax.swing.JFrame {
     private javax.swing.JLabel InstituicaoLabel;
     private javax.swing.JLabel InstituicaoVerif;
     private javax.swing.JButton addCurriculum;
+    private javax.swing.JList<String> bcElements;
     private javax.swing.JList<String> curriculumList;
     private javax.swing.JTextField event;
     private javax.swing.JList<String> eventsList;
@@ -411,7 +424,6 @@ public class coreGui extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JList<String> mktList;
     private javax.swing.JTextField name;
     private javax.swing.JButton show;
     private javax.swing.JLabel toLabel;

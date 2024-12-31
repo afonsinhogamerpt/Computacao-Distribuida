@@ -87,12 +87,15 @@ public class BlockChain implements Serializable {
             throw new Exception("Duplicated Block");
         }
         
+       
         //System.out.println("teste");
 
         //verify block
         if (!newBlock.isValid()) {
             throw new Exception("Invalid Block");
         }
+        
+       
         //System.out.println("teste2");
         //verify link
         
@@ -101,8 +104,7 @@ public class BlockChain implements Serializable {
             if (getLastBlockHash().compareTo(newBlock.previousHash) != 0) {
                 throw new Exception("Previous hash not combine");
             } 
-            //add new block to the chain
-            chain.add(newBlock);
+            //chain.add(newBlock);
         }
         chain.add(newBlock);
         //System.out.println("Bloco adicionado");
@@ -118,9 +120,11 @@ public class BlockChain implements Serializable {
 
     public String toString() {
         StringBuilder txt = new StringBuilder();
+        int i = 0;
         txt.append("Blochain size = " + chain.size() + "\n");
         for (Block block : chain) {
-            txt.append(block.toString() + "\n");
+            txt.append("Bloco " + i+ ":" + block.getMerkleRoot() + "\n");
+            i++;
         }
         return txt.toString();
     }

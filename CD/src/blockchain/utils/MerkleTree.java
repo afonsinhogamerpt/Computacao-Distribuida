@@ -255,7 +255,7 @@ public final class MerkleTree implements Serializable {
 
     public String toTree() {
         //calculate maxSize of elementos in chars
-        int SIZE = 9; // minimum size
+        int SIZE = 4; // minimum size
         for (Object elem : elements) {
             if (elem.toString().length() > SIZE) {
                 SIZE = elem.toString().length();

@@ -58,7 +58,6 @@ public class auth extends javax.swing.JFrame {
         tipoRegisto = new javax.swing.JCheckBox();
         RegistoButton = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
         passwordRegisto = new javax.swing.JPasswordField();
         jPanel5 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
@@ -180,24 +179,15 @@ public class auth extends javax.swing.JFrame {
             }
         });
 
-        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/output-onlinegiftools.gif"))); // NOI18N
-        jLabel11.setText("jLabel11");
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(76, 76, 76)
-                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(72, Short.MAX_VALUE))
+            .addGap(0, 214, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(79, 79, 79)
-                .addComponent(jLabel11)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGap(0, 264, Short.MAX_VALUE)
         );
 
         passwordRegisto.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -374,6 +364,7 @@ public class auth extends javax.swing.JFrame {
                 SwingUtilities.invokeLater(() -> {
                     if (user != null) {
                         try {
+                            System.out.println("ola");
                             new coreGui(user).setVisible(true);
                             dispose();
                         } catch (Exception ex) {
@@ -447,7 +438,6 @@ public class auth extends javax.swing.JFrame {
     private javax.swing.JButton LoginButton2;
     private javax.swing.JButton RegistoButton;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;

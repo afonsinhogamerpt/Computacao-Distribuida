@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class Teste implements Serializable{
     public static void main(String[] args) throws Exception {
         //mainCore core = new mainCore();
-        mainCore core = mainCore.load("fileCurriculumVitae.obj");
-        System.out.println(core.toString());
+        int cores = Runtime.getRuntime().availableProcessors();
+        System.out.println(cores);
     }
 }
