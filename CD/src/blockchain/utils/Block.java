@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 
 /**
@@ -41,6 +42,7 @@ public class Block implements Serializable, Comparable<Block> {
     String merkleRoot;   // merkleRoot in the block
     String currentHash;  // Hash of block
     private List<Event> events; // Lista de eventos no bloco
+    private CopyOnWriteArraySet<Event> pendingEvents; // para uso no P2P
     int nonce;           // proof of work 
     private String signature; // Assinatura da instituição pois cada bloco tem de ser adicionado por uma instituição valida.
     //List<String> transactions; // transações do bloco (devem ser guardadas em separado)
@@ -72,6 +74,22 @@ public class Block implements Serializable, Comparable<Block> {
         this.merkleRoot = mkt.getRoot();
         this.currentHash = calculateHash();
     }
+    
+    
+    public Block(String previousHash, CopyOnWriteArraySet<Event> pendingEvents){
+        this.previousHash = previousHash;
+        this.pendingEvents = new CopyOnWriteArraySet<>(pendingEvents);
+        //MerkleTree mkt = new MerkleTree(transactions);
+        MerkleTree mkt = new MerkleTree(pendingEvents.stream()
+                .map(event -> event.event)
+                .toList());
+        this.merkleRoot = mkt.getRoot();
+        this.currentHash = calculateHash();
+    }
+    
+    
+    
+    
 
     /////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////
@@ -111,6 +129,12 @@ public class Block implements Serializable, Comparable<Block> {
     public void setEvents(List<Event> events) {
         this.events = events;
     }
+
+    public void setPendingEvents(CopyOnWriteArraySet<Event> pendingEvents) {
+        this.pendingEvents = pendingEvents;
+    }
+    
+  
     
     
 

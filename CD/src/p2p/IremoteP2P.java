@@ -6,8 +6,10 @@ package p2p;
 
 import blockchain.utils.Block;
 import blockchain.utils.BlockChain;
+import core.Event;
 import java.rmi.RemoteException;
 import java.util.List;
+import shared.User;
 
 /**
  *
@@ -25,11 +27,11 @@ public interface IremoteP2P {
     //:::::::::::::: EVENTS  ::::::::::::::::::::
     public int getEventsSize() throws RemoteException;
 
-    public void addEvent(String data) throws RemoteException;
+    public void addEvent(String event, User userFrom, User userTo) throws RemoteException;
 
-    public List<String> getEvents() throws RemoteException;
+    public List<Event> getEvents() throws RemoteException;
     
-    public void removeEvents(List<String> transactions) throws RemoteException;
+    public void removeEvents(List<Event> events) throws RemoteException;
 
     public void synchronizeEvents(IremoteP2P node) throws RemoteException;
 
@@ -53,6 +55,6 @@ public interface IremoteP2P {
 
     public void synchnonizeBlockchain() throws RemoteException;
     
-    public List<String> getBlockchainTransactions()throws RemoteException;
+   // public List<String> getBlockchainTransactions()throws RemoteException;
     
 }
