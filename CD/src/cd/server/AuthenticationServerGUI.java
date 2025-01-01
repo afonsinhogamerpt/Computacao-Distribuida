@@ -4,32 +4,56 @@
  */
 package cd.server;
 
+import blockchain.utils.BlockChain;
+import core.Event;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.UnknownHostException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
+import miner.Miner;
+import p2p.P2Plistener;
+import shared.IremoteP2P;
+import utils.GuiUtils;
 
 /**
  *
  * @author António
  */
-public class AuthenticationServerGUI extends javax.swing.JFrame {
+public class AuthenticationServerGUI extends javax.swing.JFrame implements P2Plistener {
 
     // Cria uma instância da implementação do serviço
     AuthenticationServiceImpl authServiceImpl;
+    ORemoteP2P myremoteObject;
+
+    String multicastAddress = "224.0.0.1"; // multicast Address
+    int port = 5000; // multicast port
 
     /**
      * Creates new form AuthenticationServerGUI
      */
     public AuthenticationServerGUI() {
         initComponents();
+        txtAddress.setText("Localhost");
+        /*
+        try {
+            txtAddress.setText(InetAddress.getLocalHost().getHostAddress());
+        } catch (UnknownHostException ex) {
+            txtAddress.setText("Localhost");
+        }
+         */
     }
 
     /**
@@ -44,7 +68,7 @@ public class AuthenticationServerGUI extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        btnServer = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         txtAddress = new javax.swing.JTextField();
         txtPort = new javax.swing.JTextField();
@@ -61,6 +85,7 @@ public class AuthenticationServerGUI extends javax.swing.JFrame {
         jPanel10 = new javax.swing.JPanel();
         txtTimeLog1 = new javax.swing.JLabel();
         txtExceptionLog1 = new javax.swing.JLabel();
+        txtTitleLog = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
@@ -76,6 +101,7 @@ public class AuthenticationServerGUI extends javax.swing.JFrame {
         jPanel16 = new javax.swing.JPanel();
         txtExceptionLog2 = new javax.swing.JLabel();
         txtTimeLog2 = new javax.swing.JLabel();
+        txtTitleLog1 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -85,11 +111,11 @@ public class AuthenticationServerGUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/antena-parabolica.png"))); // NOI18N
-        jButton1.setText("Start");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnServer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/antena-parabolica.png"))); // NOI18N
+        btnServer.setText("Start");
+        btnServer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnServerActionPerformed(evt);
             }
         });
 
@@ -118,12 +144,11 @@ public class AuthenticationServerGUI extends javax.swing.JFrame {
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtObjectName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtObjectName, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addComponent(txtPort, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE))
         );
 
         txtServerLog.setBorder(javax.swing.BorderFactory.createTitledBorder("Log Server"));
@@ -138,7 +163,7 @@ public class AuthenticationServerGUI extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnServer, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 181, Short.MAX_VALUE)))
@@ -147,11 +172,11 @@ public class AuthenticationServerGUI extends javax.swing.JFrame {
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnServer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -225,6 +250,9 @@ public class AuthenticationServerGUI extends javax.swing.JFrame {
         txtExceptionLog1.setText("Network node");
         txtExceptionLog1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
+        txtTitleLog.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        txtTitleLog.setText("                                                     ");
+
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
@@ -234,7 +262,9 @@ public class AuthenticationServerGUI extends javax.swing.JFrame {
                 .addComponent(txtTimeLog1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtExceptionLog1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(337, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 120, Short.MAX_VALUE)
+                .addComponent(txtTitleLog)
+                .addContainerGap())
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -242,7 +272,8 @@ public class AuthenticationServerGUI extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtTimeLog1)
-                    .addComponent(txtExceptionLog1))
+                    .addComponent(txtExceptionLog1)
+                    .addComponent(txtTitleLog))
                 .addContainerGap())
         );
 
@@ -358,6 +389,9 @@ public class AuthenticationServerGUI extends javax.swing.JFrame {
         txtTimeLog2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         txtTimeLog2.setText("00:00:00.000");
 
+        txtTitleLog1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        txtTitleLog1.setText("                                                     ");
+
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
         jPanel16.setLayout(jPanel16Layout);
         jPanel16Layout.setHorizontalGroup(
@@ -367,7 +401,9 @@ public class AuthenticationServerGUI extends javax.swing.JFrame {
                 .addComponent(txtTimeLog2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtExceptionLog2, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
+                .addComponent(txtTitleLog1)
+                .addContainerGap())
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -375,7 +411,8 @@ public class AuthenticationServerGUI extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtTimeLog2)
-                    .addComponent(txtExceptionLog2))
+                    .addComponent(txtExceptionLog2)
+                    .addComponent(txtTitleLog1))
                 .addContainerGap())
         );
 
@@ -485,29 +522,50 @@ public class AuthenticationServerGUI extends javax.swing.JFrame {
 
     }//GEN-LAST:event_lstBlcockchainValueChanged
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServerActionPerformed
         // TODO add your handling code here:
 
-        new Thread(() -> { // Cria uma nova thread para evitar bloquear a interface
-            try {
-                // Inicia o RMI Registry na porta padrão (1099)
-                Registry registry = LocateRegistry.createRegistry(1099);
-                AuthenticationServiceImpl authServiceImpl = new AuthenticationServiceImpl();
-                // Registra o serviço no RMI Registry com o nome "AuthenticationService"
-                Naming.rebind("//localhost/AuthenticationService", authServiceImpl);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Cria uma nova thread para evitar bloquear a interface
+                try {
+                    int serverPort = Integer.parseInt(txtPort.getText());
+                    String host = txtAddress.getText().trim();
+                    Registry registry = LocateRegistry.createRegistry(serverPort);
+                    AuthenticationServiceImpl authServiceImpl = new AuthenticationServiceImpl();
+                    String addressAuth = String.format("//%s:%d/%s", host, serverPort, "AuthenticationService");
+                    Naming.rebind(addressAuth, authServiceImpl);
+                    // Atualiza o JTextArea no Event Dispatch Thread
+                    SwingUtilities.invokeLater(() -> {
+                        appendToPane(txtServerLog, "Servidor RMI iniciado...\n");
+                    });
+                    try {
+                        String name = txtObjectName.getText();
+                        //create adress of remote object
+                        String address = String.format("//%s:%d/%s", host, serverPort, name);
+                        myremoteObject = new ORemoteP2P(address, AuthenticationServerGUI.this);
+                        // Registra o serviço no RMI Registry com o nome "AuthenticationService"
+                        Naming.rebind(address, myremoteObject);
+                        // Atualiza o JTextArea no Event Dispatch Thread
+                        SwingUtilities.invokeLater(() -> {
+                            appendToPane(txtServerLog, "Servidor P2P iniciado...\n");
+                        });
+                    } catch (MalformedURLException | RemoteException e) {
+                        SwingUtilities.invokeLater(() -> {
+                            appendToPane(txtServerLog, "Erro ao iniciar o servidor P2P: " + e.getMessage() + "\n");
 
-                // Atualiza o JTextArea no Event Dispatch Thread
-                SwingUtilities.invokeLater(() -> {
-                    appendToPane(txtServerLog, "Servidor RMI iniciado...\n");
-                });
-            } catch (Exception e) {
-                SwingUtilities.invokeLater(() -> {
-                    appendToPane(txtServerLog, "Erro ao iniciar o servidor: " + e.getMessage() + "\n");
+                        });
+                    }
+                } catch (Exception e) {
+                    SwingUtilities.invokeLater(() -> {
+                        appendToPane(txtServerLog, "Erro ao iniciar o servidor: " + e.getMessage() + "\n");
 
-                });
+                    });
+                }
             }
         }).start();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnServerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -545,7 +603,7 @@ public class AuthenticationServerGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnServer;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel6;
@@ -586,6 +644,8 @@ public class AuthenticationServerGUI extends javax.swing.JFrame {
     private javax.swing.JTextPane txtServerLog;
     private javax.swing.JLabel txtTimeLog1;
     private javax.swing.JLabel txtTimeLog2;
+    private javax.swing.JLabel txtTitleLog;
+    private javax.swing.JLabel txtTitleLog1;
     // End of variables declaration//GEN-END:variables
 
     /**
@@ -602,6 +662,120 @@ public class AuthenticationServerGUI extends javax.swing.JFrame {
         } catch (BadLocationException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onStartRemote(String message) {
+        setTitle(message);
+        //imgServerRunning.setEnabled(true);
+        btnServer.setEnabled(false);
+        GuiUtils.addText(txtServerLog, "Start server", message);
+
+    }
+    static DateTimeFormatter hfmt = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
+
+    public void onException(Exception e, String title) {
+        txtTimeLog1.setText(LocalTime.now().format(hfmt));
+        txtExceptionLog1.setForeground(new java.awt.Color(255, 0, 0));
+        txtExceptionLog1.setText(e.getMessage());
+        txtTitleLog.setText(title);
+        // JOptionPane.showMessageDialog(this, e.getMessage(), title, JOptionPane.WARNING_MESSAGE);
+    }
+
+    @Override
+    public void onMessage(String title, String message) {
+        GuiUtils.addText(txtServerLog, title, message);
+        jTabbedPane1.setSelectedComponent(jPanel3);
+    }
+
+    @Override
+    public void onConect(String address) {
+        try {
+            List<IremoteP2P> net = myremoteObject.getNetwork();
+            String txt = "";
+            for (IremoteP2P iremoteP2P : net) {
+                txt += iremoteP2P.getAdress() + "\n";
+            }
+            txtNetwork.setText(txt);
+            jTabbedPane1.setSelectedComponent(jPanel4);
+        } catch (RemoteException ex) {
+            onException(ex, "On conect");
+            Logger.getLogger(AuthenticationServerGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    @Override
+    public void onTransaction(String transaction) {
+        /*
+        try {
+            onMessage("Transaction ", transaction);
+            String txt = "";
+            List<Event> tr = myremoteObject.getEvents();
+            for (Event event : tr) {
+                txt += event.event + "\n";
+            }
+            //txtListTransdactions.setText(txt);
+            //tpMain.setSelectedComponent(pnTransaction);
+        } catch (RemoteException ex) {
+            onException(ex, "on transaction");
+            Logger.getLogger(AuthenticationServerGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         */
+    }
+
+    @Override
+    public void onStartMining(String message, int zeros) {
+        /*
+        SwingUtilities.invokeLater(() -> {
+            tpMain.setSelectedComponent(pnTransaction);
+            btMining.setEnabled(false);
+            lblMining.setVisible(true);
+            lblWinner.setVisible(false);
+            txtLogMining.setText("[START]" + message + "[" + zeros + "]\n");
+            lblMining.setText("mining " + zeros + " zeros");
+            repaint();
+        });
+         */
+    }
+
+    @Override
+    public void onStopMining(String message, int nonce) {
+        /*
+        SwingUtilities.invokeLater(() -> {
+            txtLogMining.setText("[STOP]" + message + "[" + nonce + "]\n" + txtLogMining.getText());
+            lblMining.setVisible(false);
+            tpMain.setSelectedComponent(pnTransaction);
+            btMining.setEnabled(true);
+            txtLogMining.setText("Nounce Found [" + nonce + "]\n" + txtLogMining.getText());
+            System.out.println(" NONCE " + nonce + "\t" + message);
+            repaint();
+        });
+         */
+    }
+
+    @Override
+    public void onNounceFound(String message, int nonce) {
+        try {
+            myremoteObject.stopMining(nonce);
+        } catch (RemoteException ex) {
+            Logger.getLogger(AuthenticationServerGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    @Override
+    public void onBlockchainUpdate(BlockChain b) {
+        SwingUtilities.invokeLater(() -> {
+            DefaultListModel model = new DefaultListModel();
+            for (int i = b.getSize() - 1; i >= 0; i--) {
+                model.addElement(b.get(i));
+            }
+            lstBlcockchain.setModel(model);
+            lstBlcockchain.setSelectedIndex(0);
+            jTabbedPane1.setSelectedComponent(jPanel5);
+            repaint();
+        });
     }
 
 }

@@ -71,7 +71,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jScrollPane1" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jButton1" min="-2" pref="92" max="-2" attributes="0"/>
+                                  <Component id="btnServer" min="-2" pref="92" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jPanel7" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="0" pref="181" max="32767" attributes="0"/>
@@ -84,19 +84,19 @@
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jPanel7" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jButton1" alignment="0" min="-2" pref="128" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="jPanel7" max="32767" attributes="0"/>
+                              <Component id="btnServer" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jScrollPane1" pref="319" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" pref="299" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JButton" name="jButton1">
+                <Component class="javax.swing.JButton" name="btnServer">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/cd/client/gui/multimedia/antena-parabolica.png"/>
@@ -104,7 +104,7 @@
                     <Property name="text" type="java.lang.String" value="Start"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnServerActionPerformed"/>
                   </Events>
                 </Component>
                 <Container class="javax.swing.JPanel" name="jPanel7">
@@ -120,12 +120,11 @@
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="txtAddress" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtAddress" min="-2" pref="46" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="txtObjectName" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtObjectName" min="-2" pref="50" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="txtPort" min="-2" pref="40" max="-2" attributes="0"/>
-                              <EmptySpace pref="11" max="32767" attributes="0"/>
+                              <Component id="txtPort" pref="51" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -350,7 +349,9 @@
                               <Component id="txtTimeLog1" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="txtExceptionLog1" min="-2" pref="224" max="-2" attributes="0"/>
-                              <EmptySpace pref="337" max="32767" attributes="0"/>
+                              <EmptySpace pref="120" max="32767" attributes="0"/>
+                              <Component id="txtTitleLog" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -361,6 +362,7 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="txtTimeLog1" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="txtExceptionLog1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtTitleLog" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
@@ -387,6 +389,14 @@
                         <Property name="horizontalAlignment" type="int" value="0"/>
                         <Property name="text" type="java.lang.String" value="Network node"/>
                         <Property name="horizontalTextPosition" type="int" value="0"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="txtTitleLog">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Segoe UI" size="14" style="1"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="                                                     "/>
                       </Properties>
                     </Component>
                   </SubComponents>
@@ -621,7 +631,9 @@
                               <Component id="txtTimeLog2" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="txtExceptionLog2" min="-2" pref="220" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace pref="137" max="32767" attributes="0"/>
+                              <Component id="txtTitleLog1" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -632,6 +644,7 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="txtTimeLog2" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="txtExceptionLog2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtTitleLog1" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
@@ -658,6 +671,14 @@
                           <Font name="Segoe UI" size="14" style="1"/>
                         </Property>
                         <Property name="text" type="java.lang.String" value="00:00:00.000"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="txtTitleLog1">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Segoe UI" size="14" style="1"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="                                                     "/>
                       </Properties>
                     </Component>
                   </SubComponents>

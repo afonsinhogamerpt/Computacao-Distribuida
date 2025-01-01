@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package p2p;
+package cd.server;
 
 import shared.IremoteP2P;
 import blockchain.utils.Block;
@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import miner.Miner;
+import p2p.P2Plistener;
 import shared.User;
 import utils.RMI;
 
@@ -52,7 +53,8 @@ public class ORemoteP2P extends UnicastRemoteObject implements IremoteP2P {
         pendingEvents = new CopyOnWriteArraySet<>(); // não sei se Array set será a melhor jogada.
         this.myMiner = new Miner(listener);
         this.p2pListener = listener;
-        this.myBlockchain = new BlockChain(BLOCHAIN_FILENAME); // provavelmente tem de estar dentro de um try catch para que ao 
+        this.myBlockchain = new BlockChain();
+        //new BlockChain(BLOCHAIN_FILENAME); // provavelmente tem de estar dentro de um try catch para que ao 
         //iniciar faça o bloco genesis caso nao exista.
 
         listener.onStartRemote("Object " + address + " listening");
