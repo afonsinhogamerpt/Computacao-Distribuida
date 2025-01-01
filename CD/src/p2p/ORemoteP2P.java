@@ -4,6 +4,7 @@
  */
 package p2p;
 
+import shared.IremoteP2P;
 import blockchain.utils.Block;
 import blockchain.utils.BlockChain;
 import blockchain.utils.MerkleTree;
