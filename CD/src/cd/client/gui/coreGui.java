@@ -6,8 +6,6 @@ package cd.client.gui;
 
 import core.mainCore;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
@@ -44,15 +42,15 @@ public class coreGui extends javax.swing.JFrame {
         initComponents();
         try {
             System.out.println("ola1");
-            String url = "//localhost:" + Port + "/remoteP2P";
-            //IremoteP2P P2PService = (IremoteP2P) Naming.lookup(url);
-            IremoteP2P P2PService = (IremoteP2P) RMI.getRemote("//localhost:" + Port + "/remoteP2P");
+
+            IremoteP2P P2PService = (IremoteP2P) RMI.getRemote("//192.168.1.108:10010/RemoteP2P");
+
             System.out.println("ola2");
-            P2PService.addNode(P2PService);
+            //P2PService.addNode(P2PService);
             System.out.println("ola3");
             //core = mainCore.load(fileCurriculumVitae);
             //System.out.println(core.toString());
-        } catch (MalformedURLException | NotBoundException | RemoteException e) {
+        } catch (NotBoundException | RemoteException e) {
             System.out.println("ola5");
             //core = new mainCore();   
             //System.out.println(core.toString());

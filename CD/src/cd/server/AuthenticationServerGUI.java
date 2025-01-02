@@ -5,7 +5,9 @@
 package cd.server;
 
 import blockchain.utils.BlockChain;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.UnknownHostException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -42,14 +44,11 @@ public class AuthenticationServerGUI extends javax.swing.JFrame implements P2Pli
      */
     public AuthenticationServerGUI() {
         initComponents();
-        txtAddress.setText("localhost");
-        /*
         try {
             txtAddress.setText(InetAddress.getLocalHost().getHostAddress());
         } catch (UnknownHostException ex) {
             txtAddress.setText("Localhost");
         }
-         */
     }
 
     /**
@@ -529,18 +528,20 @@ public class AuthenticationServerGUI extends javax.swing.JFrame implements P2Pli
                 int serverPort = Integer.parseInt(txtPort.getText());
                 String host = txtAddress.getText().trim();
                 try {
-                    Registry registry = LocateRegistry.createRegistry(serverPort);
-                } catch (RemoteException ex) {
-                    Logger.getLogger(AuthenticationServerGUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                try {
                     /////////////////////////////////////////////////////////////////////
                     ///////////////////////// AUTH SERVICE //////////////////////////////
                     /////////////////////////////////////////////////////////////////////
-                 
+               
+                    Registry registry = LocateRegistry.createRegistry(serverPort);
                     AuthenticationServiceImpl authServiceImpl = new AuthenticationServiceImpl();
                     String addressAuth = String.format("//%s:%d/%s", host, serverPort, "AuthenticationService");
                     Naming.rebind(addressAuth, authServiceImpl);
+
+                    String[] boundNames = registry.list();
+                    for (String boundName : boundNames) {
+                        System.out.println(boundName);
+                    }
+
                     // Atualiza o JTextArea no Event Dispatch Thread
                     SwingUtilities.invokeLater(() -> {
                         appendToPane(txtServerLog, "Servidor RMI iniciado...\n");
@@ -551,13 +552,17 @@ public class AuthenticationServerGUI extends javax.swing.JFrame implements P2Pli
                         ///////////////////////// P2P SERVICE ///////////////////////////////
                         /////////////////////////////////////////////////////////////////////
                         
-                        //String addressP2P = txtNodeAddress.getText();
-                        //create adress of remote object
                         String addressP2P = String.format("//%s:%d/%s", host, serverPort, "RemoteP2P");
 
                         myremoteObject = new ORemoteP2P(addressP2P, AuthenticationServerGUI.this);
                         // Registra o serviço no RMI Registry com o nome "AuthenticationService"
                         Naming.rebind(addressP2P, myremoteObject);
+
+                        boundNames = registry.list();
+                        for (String boundName : boundNames) {
+                            System.out.println(boundName);
+                        }
+
                         // Atualiza o JTextArea no Event Dispatch Thread
                         SwingUtilities.invokeLater(() -> {
                             appendToPane(txtServerLog, "\nServidor P2P iniciado...\n" + addressP2P + "\n");

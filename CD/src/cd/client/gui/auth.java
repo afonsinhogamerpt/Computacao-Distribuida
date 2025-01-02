@@ -318,7 +318,7 @@ public class auth extends javax.swing.JFrame {
         new Thread(() -> {
             try {
 
-                AuthenticationService authService = (AuthenticationService) Naming.lookup("//localhost:10010/AuthenticationService");
+                AuthenticationService authService = (AuthenticationService) Naming.lookup("//192.168.1.108:10010/AuthenticationService");
 
                 User user = new User(username, userType);
                 user.generateKeys();
