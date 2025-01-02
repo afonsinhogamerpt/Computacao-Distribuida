@@ -9,13 +9,13 @@ import blockchain.utils.BlockChain;
 import core.Event;
 import java.rmi.RemoteException;
 import java.util.List;
-import shared.User;
+import java.rmi.Remote;
 
 /**
  *
  * @author António
  */
-public interface IremoteP2P {
+public interface IremoteP2P extends Remote{
     
     //:::: N E T WO R K  :::::::::::
     public String getAdress() throws RemoteException;

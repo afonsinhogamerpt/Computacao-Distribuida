@@ -318,7 +318,7 @@ public class auth extends javax.swing.JFrame {
         new Thread(() -> {
             try {
 
-                AuthenticationService authService = (AuthenticationService) Naming.lookup("//192.168.1.108:10010/AuthenticationService");
+                AuthenticationService authService = (AuthenticationService) Naming.lookup("//26.110.245.39:10010/AuthenticationService");
 
                 User user = new User(username, userType);
                 user.generateKeys();
@@ -369,7 +369,7 @@ public class auth extends javax.swing.JFrame {
         new Thread(() -> {
             try {
                 int Port = Integer.parseInt(PortNumber.getText());
-                AuthenticationService authService = (AuthenticationService) Naming.lookup("//localhost:"+Port+"/AuthenticationService");
+                AuthenticationService authService = (AuthenticationService) Naming.lookup("//26.110.245.39:"+Port+"/AuthenticationService");
 
                 User user = authService.login(username, password);
 

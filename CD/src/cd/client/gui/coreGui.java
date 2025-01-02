@@ -26,6 +26,7 @@ public class coreGui extends javax.swing.JFrame {
     User userLogged = null;
     public static String fileCurriculumVitae = "fileCurriculumVitae.obj"; // é suposto remover a seguir quando estiver no server
     mainCore core;
+    IremoteP2P P2PService;
 
     /**
      * Creates new form coreGui
@@ -43,7 +44,7 @@ public class coreGui extends javax.swing.JFrame {
         try {
             System.out.println("ola1");
 
-            IremoteP2P P2PService = (IremoteP2P) RMI.getRemote("//192.168.1.108:10010/RemoteP2P");
+            P2PService = (IremoteP2P) RMI.getRemote("//26.110.245.39:10010/RemoteP2P");
 
             System.out.println("ola2");
             //P2PService.addNode(P2PService);
