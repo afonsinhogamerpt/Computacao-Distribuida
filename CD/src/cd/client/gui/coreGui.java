@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import shared.IremoteP2P;
 import shared.User;
-
+import utils.RMI;
 
 /**
  *
@@ -28,7 +28,6 @@ public class coreGui extends javax.swing.JFrame {
     User userLogged = null;
     public static String fileCurriculumVitae = "fileCurriculumVitae.obj"; // é suposto remover a seguir quando estiver no server
     mainCore core;
-    
 
     /**
      * Creates new form coreGui
@@ -43,9 +42,9 @@ public class coreGui extends javax.swing.JFrame {
 
     public coreGui(User u, int Port) throws IOException, Exception {
         initComponents();
-        try {  
+        try {
             System.out.println("ola1");
-            IremoteP2P P2PService = (IremoteP2P) Naming.lookup("//localhost:"+Port+"/remoteP2P");
+            IremoteP2P P2PService = (IremoteP2P) RMI.getRemote("//localhost:" + Port + "/remoteP2P");
             System.out.println("ola2");
             P2PService.addNode(P2PService);
             System.out.println("ola3");
@@ -68,8 +67,7 @@ public class coreGui extends javax.swing.JFrame {
         String[] oi = core.toString().split("\n");
         bcElements.setListData(oi);
         
-        */
-
+         */
         if (userLogged.getUserType().equals("INSTITUICAO")) {
             InstituicaoLabel.setVisible(false);
             InstituicaoDropDown.setVisible(false);
@@ -346,11 +344,11 @@ public class coreGui extends javax.swing.JFrame {
 
                     core.addEvent(event.getText(), userLogged, userTo);
                     core.save(fileCurriculumVitae);
-                    
+
                     DefaultListModel ch = new DefaultListModel();
                     String[] oi = core.toString().split("\n");
                     bcElements.setListData(oi);
-                    
+
                     // Curriculum cur = new Curriculum(name.getText()); // utilizador a que vai ser associado o evento.
                     // cur.addCurriculum((name.getText() + " " + event.getText()), userLogged);
                     // cur.addEvent(event.getText(), userLogged, bc, pendingEvents);

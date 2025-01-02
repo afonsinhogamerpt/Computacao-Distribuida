@@ -561,7 +561,7 @@ public class AuthenticationServerGUI extends javax.swing.JFrame implements P2Pli
                         Naming.rebind(addressP2P, myremoteObject);
                         // Atualiza o JTextArea no Event Dispatch Thread
                         SwingUtilities.invokeLater(() -> {
-                            appendToPane(txtServerLog, "Servidor P2P iniciado...\n");
+                            appendToPane(txtServerLog, "\nServidor P2P iniciado...\n");
                         });
                     } catch (MalformedURLException | RemoteException e) {
                         SwingUtilities.invokeLater(() -> {
