@@ -5,10 +5,7 @@
 package cd.server;
 
 import blockchain.utils.BlockChain;
-import core.Event;
-import java.net.InetAddress;
 import java.net.MalformedURLException;
-import java.net.UnknownHostException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -23,7 +20,6 @@ import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
-import miner.Miner;
 import p2p.P2Plistener;
 import shared.IremoteP2P;
 import utils.GuiUtils;
@@ -144,11 +140,12 @@ public class AuthenticationServerGUI extends javax.swing.JFrame implements P2Pli
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtObjectName, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtObjectName, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtPort, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE))
+                .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         txtServerLog.setBorder(javax.swing.BorderFactory.createTitledBorder("Log Server"));
@@ -175,8 +172,8 @@ public class AuthenticationServerGUI extends javax.swing.JFrame implements P2Pli
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnServer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -192,7 +189,7 @@ public class AuthenticationServerGUI extends javax.swing.JFrame implements P2Pli
             }
         });
 
-        txtNodeAddress.setText("//10.10.208.35:10010/remoteP2P");
+        txtNodeAddress.setText("//localhost:10010/remoteP2P");
         txtNodeAddress.setBorder(javax.swing.BorderFactory.createTitledBorder("Remote Object Address"));
         txtNodeAddress.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -480,7 +477,7 @@ public class AuthenticationServerGUI extends javax.swing.JFrame implements P2Pli
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel10)
-                .addContainerGap(296, Short.MAX_VALUE))
+                .addContainerGap(403, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("About", new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/em-formacao.png")), jPanel6); // NOI18N
@@ -493,7 +490,7 @@ public class AuthenticationServerGUI extends javax.swing.JFrame implements P2Pli
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 620, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -529,10 +526,18 @@ public class AuthenticationServerGUI extends javax.swing.JFrame implements P2Pli
             @Override
             public void run() {
                 // Cria uma nova thread para evitar bloquear a interface
+                int serverPort = Integer.parseInt(txtPort.getText());
+                String host = txtAddress.getText().trim();
                 try {
-                    int serverPort = Integer.parseInt(txtPort.getText());
-                    String host = txtAddress.getText().trim();
                     Registry registry = LocateRegistry.createRegistry(serverPort);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(AuthenticationServerGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    /////////////////////////////////////////////////////////////////////
+                    ///////////////////////// AUTH SERVICE //////////////////////////////
+                    /////////////////////////////////////////////////////////////////////
+                 
                     AuthenticationServiceImpl authServiceImpl = new AuthenticationServiceImpl();
                     String addressAuth = String.format("//%s:%d/%s", host, serverPort, "AuthenticationService");
                     Naming.rebind(addressAuth, authServiceImpl);
@@ -541,12 +546,19 @@ public class AuthenticationServerGUI extends javax.swing.JFrame implements P2Pli
                         appendToPane(txtServerLog, "Servidor RMI iniciado...\n");
                     });
                     try {
-                        String name = txtObjectName.getText();
+
+                        /////////////////////////////////////////////////////////////////////
+                        ///////////////////////// P2P SERVICE ///////////////////////////////
+                        /////////////////////////////////////////////////////////////////////
+                        
+                        String addressP2P = txtNodeAddress.getText();
+                        System.out.println(addressP2P);
                         //create adress of remote object
-                        String address = String.format("//%s:%d/%s", host, serverPort, name);
-                        myremoteObject = new ORemoteP2P(address, AuthenticationServerGUI.this);
+                        //String addressP2P = String.format("//%s:%d/%s", host, serverPort, "remoteP2P");
+
+                        myremoteObject = new ORemoteP2P(addressP2P, AuthenticationServerGUI.this);
                         // Registra o serviço no RMI Registry com o nome "AuthenticationService"
-                        Naming.rebind(address, myremoteObject);
+                        Naming.rebind(addressP2P, myremoteObject);
                         // Atualiza o JTextArea no Event Dispatch Thread
                         SwingUtilities.invokeLater(() -> {
                             appendToPane(txtServerLog, "Servidor P2P iniciado...\n");

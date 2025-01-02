@@ -5,10 +5,8 @@
 package cd.client.gui;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -65,6 +63,8 @@ public class auth extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
+        PortNumber = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -243,6 +243,11 @@ public class auth extends javax.swing.JFrame {
 
         jLabel10.setText("Número de aluno: 23878");
 
+        PortNumber.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        PortNumber.setText("10010");
+
+        jLabel1.setText("PORT:");
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -254,8 +259,11 @@ public class auth extends javax.swing.JFrame {
                     .addComponent(jLabel10)
                     .addComponent(jLabel6)
                     .addComponent(jLabel7)
-                    .addComponent(jLabel9))
-                .addContainerGap(189, Short.MAX_VALUE))
+                    .addComponent(jLabel9)
+                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(PortNumber, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)))
+                .addContainerGap(190, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -270,7 +278,11 @@ public class auth extends javax.swing.JFrame {
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel10)
-                .addContainerGap(90, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(PortNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jTabbedPane3.addTab("Acerca", new javax.swing.ImageIcon(getClass().getResource("/cd/client/gui/multimedia/em-formacao.png")), jPanel5); // NOI18N
@@ -356,7 +368,8 @@ public class auth extends javax.swing.JFrame {
         // Criação de uma thread para não bloquear a interface.
         new Thread(() -> {
             try {
-                AuthenticationService authService = (AuthenticationService) Naming.lookup("//localhost:10010/AuthenticationService");
+                int Port = Integer.parseInt(PortNumber.getText());
+                AuthenticationService authService = (AuthenticationService) Naming.lookup("//localhost:"+Port+"/AuthenticationService");
 
                 User user = authService.login(username, password);
 
@@ -364,11 +377,10 @@ public class auth extends javax.swing.JFrame {
                 SwingUtilities.invokeLater(() -> {
                     if (user != null) {
                         try {
-                            System.out.println("ola");
-                            new coreGui(user).setVisible(true);
+                            new coreGui(user, Port).setVisible(true);
                             dispose();
                         } catch (Exception ex) {
-                            System.out.println("juro");
+                            System.out.println("juroTeste");
                         }
                     } else {
                         // Caso o login falhe
@@ -436,7 +448,9 @@ public class auth extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton LoginButton2;
+    private javax.swing.JTextField PortNumber;
     private javax.swing.JButton RegistoButton;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;

@@ -4,16 +4,20 @@
  */
 package cd.client.gui;
 
-import core.Curriculum;
 import core.mainCore;
 import java.io.IOException;
-import java.util.List;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import shared.IremoteP2P;
 import shared.User;
+
 
 /**
  *
@@ -24,6 +28,7 @@ public class coreGui extends javax.swing.JFrame {
     User userLogged = null;
     public static String fileCurriculumVitae = "fileCurriculumVitae.obj"; // é suposto remover a seguir quando estiver no server
     mainCore core;
+    
 
     /**
      * Creates new form coreGui
@@ -36,28 +41,34 @@ public class coreGui extends javax.swing.JFrame {
 
     }
 
-    public coreGui(User u) throws IOException, Exception {
+    public coreGui(User u, int Port) throws IOException, Exception {
         initComponents();
-
-        try {
-            System.out.println("ola");
-            core = mainCore.load(fileCurriculumVitae);
-            System.out.println(core.toString());
-        } catch (Exception e) {
+        try {  
+            System.out.println("ola1");
+            IremoteP2P P2PService = (IremoteP2P) Naming.lookup("//localhost:"+Port+"/remoteP2P");
             System.out.println("ola2");
-            core = new mainCore();   
-            System.out.println(core.toString());
+            P2PService.addNode(P2PService);
+            System.out.println("ola3");
+            //core = mainCore.load(fileCurriculumVitae);
+            //System.out.println(core.toString());
+        } catch (MalformedURLException | NotBoundException | RemoteException e) {
+            System.out.println("ola5");
+            //core = new mainCore();   
+            //System.out.println(core.toString());
         }
 
         this.userLogged = u;
         username.setText(u.getNome().toUpperCase());
 
-        //DefaultListModel model = core.getEventsBlockchain(userLogged.getPub());
-        //curriculumList.setModel(model);
+        /*
+        DefaultListModel model = core.getEventsBlockchain(userLogged.getPub());
+        curriculumList.setModel(model);
         
         DefaultListModel ch = new DefaultListModel();
         String[] oi = core.toString().split("\n");
         bcElements.setListData(oi);
+        
+        */
 
         if (userLogged.getUserType().equals("INSTITUICAO")) {
             InstituicaoLabel.setVisible(false);
