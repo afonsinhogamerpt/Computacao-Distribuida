@@ -44,6 +44,8 @@ public class coreGui extends javax.swing.JFrame {
         initComponents();
         try {
             System.out.println("ola1");
+            String url = "//localhost:" + Port + "/remoteP2P";
+            //IremoteP2P P2PService = (IremoteP2P) Naming.lookup(url);
             IremoteP2P P2PService = (IremoteP2P) RMI.getRemote("//localhost:" + Port + "/remoteP2P");
             System.out.println("ola2");
             P2PService.addNode(P2PService);

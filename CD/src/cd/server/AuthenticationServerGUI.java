@@ -42,7 +42,7 @@ public class AuthenticationServerGUI extends javax.swing.JFrame implements P2Pli
      */
     public AuthenticationServerGUI() {
         initComponents();
-        txtAddress.setText("Localhost");
+        txtAddress.setText("localhost");
         /*
         try {
             txtAddress.setText(InetAddress.getLocalHost().getHostAddress());
@@ -551,17 +551,16 @@ public class AuthenticationServerGUI extends javax.swing.JFrame implements P2Pli
                         ///////////////////////// P2P SERVICE ///////////////////////////////
                         /////////////////////////////////////////////////////////////////////
                         
-                        String addressP2P = txtNodeAddress.getText();
-                        System.out.println(addressP2P);
+                        //String addressP2P = txtNodeAddress.getText();
                         //create adress of remote object
-                        //String addressP2P = String.format("//%s:%d/%s", host, serverPort, "remoteP2P");
+                        String addressP2P = String.format("//%s:%d/%s", host, serverPort, "RemoteP2P");
 
                         myremoteObject = new ORemoteP2P(addressP2P, AuthenticationServerGUI.this);
                         // Registra o serviço no RMI Registry com o nome "AuthenticationService"
                         Naming.rebind(addressP2P, myremoteObject);
                         // Atualiza o JTextArea no Event Dispatch Thread
                         SwingUtilities.invokeLater(() -> {
-                            appendToPane(txtServerLog, "\nServidor P2P iniciado...\n");
+                            appendToPane(txtServerLog, "\nServidor P2P iniciado...\n" + addressP2P + "\n");
                         });
                     } catch (MalformedURLException | RemoteException e) {
                         SwingUtilities.invokeLater(() -> {
