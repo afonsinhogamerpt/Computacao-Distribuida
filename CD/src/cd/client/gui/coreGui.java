@@ -337,9 +337,8 @@ public class coreGui extends javax.swing.JFrame {
                 if (userLogged.getUserType().equals("INSTITUICAO")) {
 
                     User userTo = new User(name.getText(), "NORMAL");
-                    userTo.loadPublic();
                     
-                    P2PService.addEvent(fileCurriculumVitae, userLogged, userTo);
+                    P2PService.addEvent(event.getText(), userLogged, userTo);
 
                     //core.addEvent(event.getText(), userLogged, userTo);
                     //core.save(fileCurriculumVitae);

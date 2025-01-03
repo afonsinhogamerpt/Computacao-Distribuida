@@ -158,6 +158,14 @@ public class ORemoteP2P extends UnicastRemoteObject implements IremoteP2P {
      */
     @Override
     public void addEvent(String event, User userFrom, User userTo) throws RemoteException {
+        
+        try{
+            userTo.loadPublic();
+        }catch(Exception e){
+             System.out.println("user not exist in server");
+        }
+        
+        
         // verificar 
         try {
             Event newEvent = new Event(event, userFrom, userTo);
