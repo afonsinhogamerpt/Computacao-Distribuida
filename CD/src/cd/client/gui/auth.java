@@ -4,6 +4,7 @@
  */
 package cd.client.gui;
 
+import blockchain.utils.Hash;
 import java.io.IOException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -65,6 +66,8 @@ public class auth extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         PortNumber = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        hostIP = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -110,7 +113,7 @@ public class auth extends javax.swing.JFrame {
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane3)
-            .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+            .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -183,7 +186,7 @@ public class auth extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 214, Short.MAX_VALUE)
+            .addGap(0, 257, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -248,6 +251,10 @@ public class auth extends javax.swing.JFrame {
 
         jLabel1.setText("PORT:");
 
+        jLabel2.setText("Host/Server IP");
+
+        hostIP.setText("26.224.174.88");
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -259,11 +266,17 @@ public class auth extends javax.swing.JFrame {
                     .addComponent(jLabel10)
                     .addComponent(jLabel6)
                     .addComponent(jLabel7)
-                    .addComponent(jLabel9)
-                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(PortNumber, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)))
-                .addContainerGap(190, Short.MAX_VALUE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(PortNumber, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE))
+                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(hostIP, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(89, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -279,9 +292,13 @@ public class auth extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                .addComponent(jLabel1)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(PortNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(PortNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(hostIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -317,15 +334,17 @@ public class auth extends javax.swing.JFrame {
         // Criação de uma thread para não bloquear a interface.
         new Thread(() -> {
             try {
-
-                AuthenticationService authService = (AuthenticationService) Naming.lookup("//26.110.245.39:10010/AuthenticationService");
-
+                int Port = Integer.parseInt(PortNumber.getText());
+                String addressHost = hostIP.getText();
+                AuthenticationService authService = (AuthenticationService) Naming.lookup("//" + addressHost + ":" + Port + "/AuthenticationService");
+                
+                // salvar o utilizador localmente.
                 User user = new User(username, userType);
                 user.generateKeys();
                 user.save(password);
 
                 // Realizar o registo no servidor
-                boolean registrationSuccess = authService.register(username, password, userType);
+                boolean registrationSuccess = authService.register(username, user.getPublicKeyEncoded(), userType, Hash.getHash(password));
 
                 // Atualizar a tab e mostrar mensagem de dialog.
                 SwingUtilities.invokeLater(() -> {
@@ -369,7 +388,8 @@ public class auth extends javax.swing.JFrame {
         new Thread(() -> {
             try {
                 int Port = Integer.parseInt(PortNumber.getText());
-                AuthenticationService authService = (AuthenticationService) Naming.lookup("//26.110.245.39:"+Port+"/AuthenticationService");
+                String addressHost = hostIP.getText();
+                AuthenticationService authService = (AuthenticationService) Naming.lookup("//" + addressHost + ":" + Port + "/AuthenticationService");
 
                 User user = authService.login(username, password);
 
@@ -377,7 +397,8 @@ public class auth extends javax.swing.JFrame {
                 SwingUtilities.invokeLater(() -> {
                     if (user != null) {
                         try {
-                            new coreGui(user, Port).setVisible(true);
+                            user.load(password);
+                            new coreGui(user, Port, addressHost).setVisible(true);
                             dispose();
                         } catch (Exception ex) {
                             System.out.println("juroTeste");
@@ -450,11 +471,13 @@ public class auth extends javax.swing.JFrame {
     private javax.swing.JButton LoginButton2;
     private javax.swing.JTextField PortNumber;
     private javax.swing.JButton RegistoButton;
+    private javax.swing.JTextField hostIP;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;

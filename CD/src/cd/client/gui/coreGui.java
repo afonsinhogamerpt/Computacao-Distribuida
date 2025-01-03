@@ -39,16 +39,12 @@ public class coreGui extends javax.swing.JFrame {
 
     }
 
-    public coreGui(User u, int Port) throws IOException, Exception {
+    public coreGui(User u, int Port, String hostIp) throws IOException, Exception {
         initComponents();
         try {
-            System.out.println("ola1");
+            P2PService = (IremoteP2P) RMI.getRemote("//"+hostIp+":"+Port+"/RemoteP2P");
 
-            P2PService = (IremoteP2P) RMI.getRemote("//26.110.245.39:10010/RemoteP2P");
-
-            System.out.println("ola2");
-            //P2PService.addNode(P2PService);
-            System.out.println("ola3");
+            //P2PService.addNode(P2PService);    
             //core = mainCore.load(fileCurriculumVitae);
             //System.out.println(core.toString());
         } catch (NotBoundException | RemoteException e) {
@@ -342,13 +338,15 @@ public class coreGui extends javax.swing.JFrame {
 
                     User userTo = new User(name.getText(), "NORMAL");
                     userTo.loadPublic();
+                    
+                    P2PService.addEvent(fileCurriculumVitae, userLogged, userTo);
 
-                    core.addEvent(event.getText(), userLogged, userTo);
-                    core.save(fileCurriculumVitae);
+                    //core.addEvent(event.getText(), userLogged, userTo);
+                    //core.save(fileCurriculumVitae);
 
-                    DefaultListModel ch = new DefaultListModel();
-                    String[] oi = core.toString().split("\n");
-                    bcElements.setListData(oi);
+//                    DefaultListModel ch = new DefaultListModel();
+//                    String[] oi = core.toString().split("\n");
+//                    bcElements.setListData(oi);
 
                     // Curriculum cur = new Curriculum(name.getText()); // utilizador a que vai ser associado o evento.
                     // cur.addCurriculum((name.getText() + " " + event.getText()), userLogged);

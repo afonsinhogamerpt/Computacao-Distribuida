@@ -8,6 +8,7 @@ package cd.server;
  *
  * @author António Gonçalves e Afonso Costa
  */
+import blockchain.utils.Hash;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -35,8 +36,7 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
     private final ExecutorService executorService;
     private final LinkedBlockingQueue<Runnable> taskQueue;
     private final String publicKeyDir = "server_pub_keys"; // nome da pasta para armazenar as chaves publicas.
- 
-    
+
     /**
      * *
      * Lista de tarefas para 100 pedidos, bem como uma pool de 10 threads
@@ -55,8 +55,7 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
         if (!dir.exists()) {
             dir.mkdir();
         }
-       
-        
+
         startProcessingQueue();
     }
 
@@ -80,8 +79,7 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
     }
 
     /**
-     * 1ºpasso: verificação da existencia de utilizador 
-     * 1.1º: caso não exista
+     * 1ºpasso: verificação da existencia de utilizador 1.1º: caso não exista
      * chave publica devolvemos logo false, pois nao existe
      *
      * @param username
@@ -89,7 +87,7 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
      * @return
      * @throws RemoteException
      */
-      @Override
+    @Override
     public User login(String username, String password) throws RemoteException {
         // Verificar se a chave pública do usuário existe
         Path publicKeyPath = Path.of(publicKeyDir, username + ".pub");
@@ -99,11 +97,29 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
         }
 
         try {
-            // Carregar o usuário a partir do arquivo
+
+            // Verificar se o hash da senha existe
+            Path passwordPath = Path.of(publicKeyDir, username + ".password");
+            if (!Files.exists(passwordPath)) {
+                System.out.println("Senha não encontrada para o utilizador.");
+                return null;
+            }
+
+            // Carregar o hash da senha armazenado
+            String storedPasswordHash = Files.readString(passwordPath);
+
+            // Gerar o hash da senha fornecida
+            String providedPasswordHash = Hash.getHash(password);
+
+            // Comparar as duas hash
+            if (!storedPasswordHash.equals(providedPasswordHash)) {
+                System.out.println("Senha incorreta.");
+                return null; // Retorna null caso as senhas não correspondam
+            }
+            // constroi o utilizador.
             User user = new User(username, "NORMAL");  // Tipo "NORMAL" como padrão
-            user.load(password);  // Carregar a senha, o que também carrega o tipo de usuário
-            
-            return user;  // Retorna o objeto User caso o login tenha sido bem-sucedido
+
+            return user;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -122,14 +138,18 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
      * @throws RemoteException
      */
     @Override
-    public boolean register(String username, String password, String userType) throws RemoteException {
+    public boolean register(String username, String publicKeyEncoded, String userType, String password) throws RemoteException {
         taskQueue.offer(() -> {
             try {
-                User user = new User(username, userType);  // O tipo de utilizador pode ser "NORMAL" ou "INSTITUICAO"
-                user.generateKeys();
-                user.save(password); // Salva chaves localmente no cliente
-                // Salva a chave pública no servidor
-                savePublicKey(username, user.getPublicKeyEncoded());
+
+                // Salva a chave pública no servidor.
+                savePublicKey(username, publicKeyEncoded);
+
+                //salva o tipo do utilizador no servidor.
+                saveUserType(username, userType);
+
+                //salva a password
+                savePassword(username, password);
 
                 System.out.println("Registro bem-sucedido para " + username + " como " + userType);
             } catch (Exception e) {
@@ -146,12 +166,22 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
         System.out.println("Chave pública de " + username + " guardada no servidor.");
     }
 
+    private void saveUserType(String username, String userType) throws IOException {
+        Path publicKeyPath = Path.of(publicKeyDir, username + ".type");
+        Files.write(publicKeyPath, userType.getBytes());
+        System.out.println("Tipo " + userType + " de " + username + " guardada no servidor.");
+    }
+
+    private void savePassword(String username, String passwordHash) throws IOException {
+        Path publicKeyPath = Path.of(publicKeyDir, username + ".password");
+        Files.write(publicKeyPath, passwordHash.getBytes());
+        System.out.println("Password de " + username + " guardada no servidor.");
+    }
+
     public void shutdown() {
         executorService.shutdown();
     }
 
-   
-    
     /*@Override
     public void addCurriculum(String curriculum, String username) throws RemoteException {
         try {
@@ -175,6 +205,5 @@ public class AuthenticationServiceImpl extends UnicastRemoteObject implements Au
         }
         return model;
     }
-  */
- 
+     */
 }

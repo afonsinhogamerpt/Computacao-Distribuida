@@ -163,6 +163,8 @@ public class ORemoteP2P extends UnicastRemoteObject implements IremoteP2P {
             Event newEvent = new Event(event, userFrom, userTo);
             newEvent.EncryptEvent();
             pendingEvents.add(newEvent);
+            
+            System.out.println(getEventsSize());
 
             // Adicionar a transacao aos nos da rede
             for (IremoteP2P iremoteP2P : networkPeers) {
@@ -194,6 +196,8 @@ public class ORemoteP2P extends UnicastRemoteObject implements IremoteP2P {
                 newBlock.signBlock(userFrom.getPriv());
                 addBlock(newBlock);
                 removeEvents(new ArrayList<>(pendingEvents));
+                System.out.println(getBlockchainSize());
+                System.out.println(getEventsSize());
             }
         } catch (Exception e) {
 
