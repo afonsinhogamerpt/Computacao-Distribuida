@@ -113,7 +113,6 @@ public class mainCore implements Serializable {
         // When the pending list reaches 8 events, create a block
         if (pendingEvents.size() >= 8) {
             // Generate the Merkle root for the events
-            System.out.println(pendingEvents + " dentro do if");
             MerkleTree mkt = new MerkleTree(pendingEvents.stream()
                     .map(pendingEvent -> pendingEvent.event)
                     .toList());
