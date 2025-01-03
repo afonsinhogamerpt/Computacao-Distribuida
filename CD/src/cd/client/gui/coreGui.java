@@ -19,7 +19,7 @@ import utils.RMI;
 
 /**
  *
- * @author António
+ * @author António Gonçalves e Afonso Costa
  */
 public class coreGui extends javax.swing.JFrame {
 
@@ -44,11 +44,11 @@ public class coreGui extends javax.swing.JFrame {
         try {
             P2PService = (IremoteP2P) RMI.getRemote("//"+hostIp+":"+Port+"/RemoteP2P");
 
-            //P2PService.addNode(P2PService);    
+            //P2PService.addNode(P2PService);
+            
             //core = mainCore.load(fileCurriculumVitae);
             //System.out.println(core.toString());
         } catch (NotBoundException | RemoteException e) {
-            System.out.println("ola5");
             //core = new mainCore();   
             //System.out.println(core.toString());
         }
@@ -65,6 +65,7 @@ public class coreGui extends javax.swing.JFrame {
         bcElements.setListData(oi);
         
          */
+        
         if (userLogged.getUserType().equals("INSTITUICAO")) {
             InstituicaoLabel.setVisible(false);
             InstituicaoDropDown.setVisible(false);

@@ -21,7 +21,7 @@ import shared.User;
 
 /**
  *
- * @author afons
+ * @author António Gonçalves e Afonso Costa
  */
 public class Curriculum {
 

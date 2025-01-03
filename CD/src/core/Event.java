@@ -12,7 +12,7 @@ import utils.SecurityUtils;
 
 /**
  *
- * @author António
+ * @author António Gonçalves e Afonso Costa
  */
 public class Event implements Serializable {
 

@@ -13,7 +13,7 @@ import java.rmi.Remote;
 
 /**
  *
- * @author António
+ * @author António Gonçalves e Afonso Costa
  */
 public interface IremoteP2P extends Remote{
     

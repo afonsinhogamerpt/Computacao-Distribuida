@@ -18,7 +18,7 @@ import shared.User;
 
 /**
  *
- * @author António
+ * @author António Gonçalves e Afonso Costa
  */
 public class auth extends javax.swing.JFrame {
 

@@ -22,7 +22,7 @@ import shared.User;
 
 /**
  *
- * @author António
+ * @author António Gonçalves e Afonso Costa
  */
 public class mainCore implements Serializable {
 

@@ -53,10 +53,15 @@ public class ORemoteP2P extends UnicastRemoteObject implements IremoteP2P {
         pendingEvents = new CopyOnWriteArraySet<>(); // não sei se Array set será a melhor jogada.
         this.myMiner = new Miner(listener);
         this.p2pListener = listener;
-        this.myBlockchain = new BlockChain();
-        //new BlockChain(BLOCHAIN_FILENAME); // provavelmente tem de estar dentro de um try catch para que ao 
-        //iniciar faça o bloco genesis caso nao exista.
-
+        
+        try{
+            this.myBlockchain = new BlockChain(BLOCHAIN_FILENAME);
+        }catch(Exception e){
+            //iniciar faça o bloco genesis caso nao exista.
+             this.myBlockchain = new BlockChain();
+        }
+    
+        
         listener.onStartRemote("Object " + address + " listening");
 
     }
@@ -158,20 +163,19 @@ public class ORemoteP2P extends UnicastRemoteObject implements IremoteP2P {
      */
     @Override
     public void addEvent(String event, User userFrom, User userTo) throws RemoteException {
-        
-        try{
+
+        try {
             userTo.loadPublic();
-        }catch(Exception e){
-             System.out.println("user not exist in server");
+        } catch (Exception e) {
+            System.out.println("user not exist in server");
         }
-        
-        
+
         // verificar 
         try {
             Event newEvent = new Event(event, userFrom, userTo);
             newEvent.EncryptEvent();
             pendingEvents.add(newEvent);
-            
+
             System.out.println(getEventsSize());
 
             // Adicionar a transacao aos nos da rede
@@ -196,7 +200,7 @@ public class ORemoteP2P extends UnicastRemoteObject implements IremoteP2P {
                 // Create the new block
                 Block newBlock = new Block(prevHash, pendingEvents);
                 newBlock.setNonce(nonce);
-                
+
                 // nao sei se temos de voltar a fazer pois o construtor acho que já faz
                 newBlock.setMerkleRoot(merkleRoot); // nao sei se temos de dar set da merkle outra vez
                 newBlock.setPendingEvents(pendingEvents);
@@ -206,6 +210,8 @@ public class ORemoteP2P extends UnicastRemoteObject implements IremoteP2P {
                 removeEvents(new ArrayList<>(pendingEvents));
                 System.out.println(getBlockchainSize());
                 System.out.println(getEventsSize());
+                
+                myBlockchain.save(BLOCHAIN_FILENAME);
             }
         } catch (Exception e) {
 
@@ -213,22 +219,25 @@ public class ORemoteP2P extends UnicastRemoteObject implements IremoteP2P {
 
     }
 
-    
-    /***
+    /**
+     * *
      * método retorna os eventos que estão a ser processados.
+     *
      * @return
-     * @throws RemoteException 
+     * @throws RemoteException
      */
     @Override
     public List<Event> getEvents() throws RemoteException {
-         return new ArrayList<>(pendingEvents);
+        return new ArrayList<>(pendingEvents);
     }
 
-    
-    /***
-     * Este método vai servir para remover os eventos inseridos e propagar essa informação aos restantes nós.
+    /**
+     * *
+     * Este método vai servir para remover os eventos inseridos e propagar essa
+     * informação aos restantes nós.
+     *
      * @param events
-     * @throws RemoteException 
+     * @throws RemoteException
      */
     @Override
     public void removeEvents(List<Event> events) throws RemoteException {
@@ -247,7 +256,7 @@ public class ORemoteP2P extends UnicastRemoteObject implements IremoteP2P {
 
     @Override
     public void synchronizeEvents(IremoteP2P node) throws RemoteException {
-         //tamanho anterior
+        //tamanho anterior
         int oldsize = getEventsSize();
         p2pListener.onMessage("sinchronizeTransactions", node.getAdress());
         // juntar as transacoes todas (SET elimina as repetidas)
@@ -263,7 +272,7 @@ public class ORemoteP2P extends UnicastRemoteObject implements IremoteP2P {
             //pedir á rede para se sincronizar
             for (IremoteP2P iremoteP2P : networkPeers) {
                 //se o tamanho for menor
-                if (iremoteP2P.getEventsSize()< newSize) {
+                if (iremoteP2P.getEventsSize() < newSize) {
                     //cincronizar-se com o no actual
                     p2pListener.onMessage("sinchronizeTransactions", " iremoteP2P.sinchronizeTransactions(this)");
                     iremoteP2P.synchronizeEvents(this);
@@ -277,7 +286,7 @@ public class ORemoteP2P extends UnicastRemoteObject implements IremoteP2P {
     //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     @Override
     public void startMining(String msg, int zeros) throws RemoteException {
-              try {
+        try {
             //colocar a mineiro a minar
             myMiner.startMining(msg, zeros);
             p2pListener.onStartMining(msg, zeros);
@@ -311,12 +320,12 @@ public class ORemoteP2P extends UnicastRemoteObject implements IremoteP2P {
 
     @Override
     public boolean isMining() throws RemoteException {
-      return myMiner.isMining();
+        return myMiner.isMining();
     }
 
     @Override
     public int mine(String msg, int zeros) throws RemoteException {
-         try {
+        try {
             //começar a minar a mensagem
             startMining(msg, zeros);
             //esperar que o nonce seja calculado
@@ -329,7 +338,7 @@ public class ORemoteP2P extends UnicastRemoteObject implements IremoteP2P {
 
     @Override
     public void addBlock(Block b) throws RemoteException {
-      try {
+        try {
             //se não for válido
             if (!b.isValid()) {
                 throw new RemoteException("invalid block");
@@ -368,12 +377,12 @@ public class ORemoteP2P extends UnicastRemoteObject implements IremoteP2P {
 
     @Override
     public String getBlockchainLastHash() throws RemoteException {
-       return myBlockchain.getLastBlockHash();
+        return myBlockchain.getLastBlockHash();
     }
 
     @Override
     public BlockChain getBlockchain() throws RemoteException {
-       return myBlockchain;
+        return myBlockchain;
     }
 
     @Override
@@ -393,8 +402,6 @@ public class ORemoteP2P extends UnicastRemoteObject implements IremoteP2P {
             }
         }
     }
-    
-    
 
     /*
     @Override
@@ -405,6 +412,5 @@ public class ORemoteP2P extends UnicastRemoteObject implements IremoteP2P {
         }
         return allTransactions;
     }
-*/
-
+     */
 }
